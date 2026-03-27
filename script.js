@@ -1,22 +1,57 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Navbar Scroll Effect
     const navbar = document.querySelector('.navbar');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    // 1. Navbar Scroll Effect & Mobile Shrinking Pill
+    let lastScrollY = window.scrollY;
+    
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        const currentScrollY = window.scrollY;
+        
+        // General background
+        if (currentScrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
+
+        // Mobile specific: Shrinking pill based on direction
+        if (window.innerWidth <= 768) {
+            if (currentScrollY > 150 && currentScrollY > lastScrollY) {
+                // Scrolling Down -> Shrink
+                if (!navbar.classList.contains('mobile-collapsed')) {
+                    navbar.classList.add('mobile-collapsed');
+                    menuToggle.innerHTML = `<i data-lucide="arrow-up"></i>`;
+                    if(window.lucide) lucide.createIcons();
+                }
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 150) {
+                // Scrolling Up -> Expand back
+                if (navbar.classList.contains('mobile-collapsed')) {
+                    navbar.classList.remove('mobile-collapsed');
+                    // Retain correct icon if menu is active or not
+                    const iconName = navLinks.classList.contains('active') ? 'x' : 'menu';
+                    menuToggle.innerHTML = `<i data-lucide="${iconName}"></i>`;
+                    if(window.lucide) lucide.createIcons();
+                }
+            }
+        }
+        lastScrollY = currentScrollY;
     });
 
     // 1.5 Mobile Menu Toggle
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    menuToggle.addEventListener('click', () => {
+    menuToggle.addEventListener('click', (e) => {
+        // Intercept if it's the "Scroll to top" icon
+        if (navbar.classList.contains('mobile-collapsed')) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+        
         navLinks.classList.toggle('active');
         const iconName = navLinks.classList.contains('active') ? 'x' : 'menu';
         menuToggle.innerHTML = `<i data-lucide="${iconName}"></i>`;
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
         if(window.lucide) lucide.createIcons();
     });
 
@@ -24,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('active');
             menuToggle.innerHTML = `<i data-lucide="menu"></i>`;
+            document.body.style.overflow = '';
             if(window.lucide) lucide.createIcons();
         });
     });

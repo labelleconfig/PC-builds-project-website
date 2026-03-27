@@ -150,22 +150,59 @@ select option { background-color: var(--bg-dark); }
         border-radius: 50px; padding: 1rem 1.5rem !important;
         background: rgba(10,10,15,0.6) !important; 
         backdrop-filter: blur(20px) saturate(150%) !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
+        border: 1px solid var(--glass-border) !important;
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        display: flex; overflow: hidden;
     }
-    .logo { font-size: 1.4rem; }
+    .navbar.mobile-collapsed {
+        width: 3.5rem;
+        padding: 0 !important;
+        margin-left: calc(100% - 4.5rem);
+        height: 3.5rem;
+    }
+    .navbar .logo { transition: opacity 0.3s ease, width 0.3s ease; font-size: 1.4rem; white-space: nowrap; }
+    .navbar.mobile-collapsed .logo { opacity: 0; width: 0; pointer-events: none; }
+    
+    .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: justify-content 0.3s; }
+    .navbar.mobile-collapsed .nav-container { justify-content: center; }
+    
+    .menu-toggle { display: flex; z-index: 100; position: relative; width: 24px; justify-content: center; }
+    .navbar.mobile-collapsed .menu-toggle { color: var(--accent-cyan); }
+
+    /* FULLSCREEN OVERLAY MENU */
     .nav-links { 
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(5,5,8,0.98); 
-        flex-direction: column; padding: 6rem 2rem; gap: 2rem; 
-        border: none; z-index: 99; justify-content: center;
-        opacity: 0; pointer-events: none; transform: scale(0.98);
+        background: rgba(5,5,8,0.85); backdrop-filter: blur(30px);
+        flex-direction: column; padding: 7rem 2rem 4rem 2rem; gap: 2rem; 
+        border: none; z-index: 99; justify-content: center; align-items: flex-start;
+        opacity: 0; pointer-events: none; transform: translateY(-20px);
         transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .nav-links a { font-size: 2rem; font-weight: 600; text-align: center; width: 100%; display: block; margin-bottom: 0.5rem; }
-    .nav-links .btn { display: inline-flex; width: auto; margin: 1rem auto; padding: 1rem 2rem; font-size: 1.25rem; }
-    .nav-links.active { opacity: 1; pointer-events: all; transform: scale(1); display: flex; }
-    .menu-toggle { display: block; z-index: 100; position: relative; }
+    .nav-links.active { opacity: 1; pointer-events: all; transform: translateY(0); display: flex; }
+    
+    .nav-links li { 
+        opacity: 0; transform: translateY(20px); 
+        transition: opacity 0.4s ease, transform 0.4s ease; width: 100%; 
+    }
+    .nav-links.active li { opacity: 1; transform: translateY(0); }
+    .nav-links.active li:nth-child(1) { transition-delay: 0.1s; }
+    .nav-links.active li:nth-child(2) { transition-delay: 0.2s; }
+    .nav-links.active li:nth-child(3) { transition-delay: 0.3s; }
+
+    .nav-links a { 
+        font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 700; 
+        text-align: left; width: 100%; display: block; margin-bottom: 0.5rem; 
+        color: var(--text-primary);
+    }
+    
+    /* Sleek outline button for "Sur demande" in mobile menu */
+    .nav-links .btn { 
+        display: inline-flex; width: auto; margin: 1rem 0; padding: 1rem 2.5rem; 
+        font-size: 1.25rem; font-weight: 500; font-family: 'Inter', sans-serif;
+        background: transparent; border: 1px solid var(--accent-cyan);
+        color: var(--accent-cyan); box-shadow: 0 0 15px rgba(0,229,255,0.1);
+    }
 
     /* 2. Hero Section */
     .hero { padding-top: 6rem; text-align: center; }
