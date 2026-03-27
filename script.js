@@ -9,6 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 1.5 Mobile Menu Toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const iconName = navLinks.classList.contains('active') ? 'x' : 'menu';
+        menuToggle.innerHTML = `<i data-lucide="${iconName}"></i>`;
+        if(window.lucide) lucide.createIcons();
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuToggle.innerHTML = `<i data-lucide="menu"></i>`;
+            if(window.lucide) lucide.createIcons();
+        });
+    });
+
     // 2. Intersection Observer for Fade-In-Up Animations
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
     const observer = new IntersectionObserver((entries, observer) => {
