@@ -55,8 +55,7 @@ p { color: var(--text-secondary); }
 .navbar { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.5rem 0; transition: var(--transition-normal); }
 .navbar.scrolled { padding: 1rem 0; background: rgba(10,10,15,0.8); border-bottom: 1px solid var(--glass-border); }
 .nav-container { display: flex; justify-content: space-between; align-items: center; }
-.logo { display: flex; align-items: center; }
-.logo-img { height: 40px; width: auto; object-fit: contain; }
+.logo { font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 0.5rem; font-size: 1.6rem; font-weight: 800; color: var(--text-primary); }
 .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
 .nav-links a:not(.btn) { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: var(--transition-fast); }
 .nav-links a:not(.btn):hover { color: var(--accent-cyan); }
@@ -162,9 +161,8 @@ select option { background-color: var(--bg-dark); }
         margin-left: calc(100% - 4.5rem);
         height: 3.5rem;
     }
-    .navbar .logo { transition: opacity 0.3s ease, width 0.3s ease; white-space: nowrap; overflow: hidden; }
-    .navbar.mobile-collapsed .logo { opacity: 0; width: 0; margin-right: 0; pointer-events: none; }
-    .logo-img { height: 32px; }
+    .navbar .logo { transition: opacity 0.3s ease, width 0.3s ease; font-size: 1.4rem; white-space: nowrap; }
+    .navbar.mobile-collapsed .logo { opacity: 0; width: 0; pointer-events: none; }
     
     .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; transition: justify-content 0.3s; }
     .navbar.mobile-collapsed .nav-container { justify-content: center; }
