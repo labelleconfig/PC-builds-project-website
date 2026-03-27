@@ -115,7 +115,7 @@ select option { background-color: var(--bg-dark); }
 .modal-images.layout-3 { grid-template-columns: 1fr 1fr; }
 .modal-images.layout-3 .img-0 { grid-column: span 2; aspect-ratio: 16 / 10; }
 .modal-images.layout-3 .img-1, .modal-images.layout-3 .img-2 { aspect-ratio: 1 / 1; }
-.modal-img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); box-shadow: 0 4px 20px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); transition: transform 0.3s ease; }
+.modal-img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: var(--radius-md); box-shadow: 0 4px 20px rgba(0,0,0,0.3); border: 1px solid var(--glass-border); transition: transform 0.3s ease; }
 .modal-img:hover { transform: scale(1.02); }
 
 .modal-thumbs-container { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
@@ -177,13 +177,34 @@ select option { background-color: var(--bg-dark); }
     /* 5. PC Grid / Modal */
     .pc-card-img { height: 200px; }
     
-    .modal-content { width: 95%; max-height: 85vh; }
-    .modal-gallery-wrapper { padding: 1.5rem 1.5rem 0 1.5rem; }
-    .modal-details { padding: 1.5rem; }
-    .modal-title { font-size: 1.5rem; }
-    .modal-price { font-size: 1.3rem; margin-bottom: 1.5rem; }
-    .spec-item { align-items: center; }
-    .spec-content p { font-size: 0.875rem; }
+    .modal { padding: 0; }
+    .modal-content { 
+        width: 100%; max-width: 100%; height: 100%; max-height: 100vh; 
+        border-radius: 0; transform: translateY(100px); opacity: 0; 
+    }
+    .modal.active .modal-content { transform: translateY(0); opacity: 1; }
+    .modal-close { 
+        position: fixed; top: 1rem; right: 1rem; 
+        background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 9999; 
+    }
+    
+    .modal-gallery-wrapper { padding: 4rem 1.5rem 1rem 1.5rem; gap: 0.75rem; }
+    .modal-images { gap: 0.5rem; }
+    .modal-thumbs-container { gap: 0.5rem; }
+    .thumb-img { width: 45px; height: 45px; }
+
+    .modal-details { padding: 1rem 1.5rem 2.5rem 1.5rem; }
+    .modal-title { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .modal-price { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    
+    .specs-grid { grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 2rem;}
+    .spec-item { 
+        background: rgba(255,255,255,0.02); padding: 1rem; 
+        border-radius: var(--radius-sm); border: 1px solid var(--glass-border); 
+        align-items: center; 
+    }
+    .spec-content h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .spec-content p { font-size: 0.875rem; font-weight: 500; margin-top: 0.1rem; }
     
     /* 6. Form Container */
     .form-container { padding: 1.5rem; }
