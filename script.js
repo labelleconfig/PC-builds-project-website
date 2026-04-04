@@ -140,18 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'pc-card glass fade-in-up visible';
             card.style.animationDelay = `${index * 100}ms`;
             
+            const statusClass = pc.Statut && pc.Statut.toLowerCase().includes('premium') ? 'premium' : '';
             card.innerHTML = `
-                <img src="${mainImage}" alt="${pc.Nom}" class="pc-card-img" loading="lazy">
+                <div class="pc-card-img-wrapper">
+                    <img src="${mainImage}" alt="${pc.Nom}" class="pc-card-img" loading="lazy">
+                    <span class="pc-status ${statusClass}">${pc.Statut || 'Disponible'}</span>
+                </div>
                 <div class="pc-card-content">
-                    <span class="pc-status">${pc.Statut || 'Disponible'}</span>
-                    <h3 class="pc-name">${pc.Nom || 'La Belle Config'}</h3>
-                    <div class="pc-price">${pc.Prix || 'N/A'}</div>
+                    <div class="pc-header-row">
+                        <h3 class="pc-name">${pc.Nom || 'La Belle Config'}</h3>
+                        <div class="pc-price">${pc.Prix || 'N/A'}</div>
+                    </div>
                     <ul class="pc-specs-mini">
                         <li><i data-lucide="cpu"></i> ${pc.CPU || '-'}</li>
                         <li><i data-lucide="monitor"></i> ${pc.GPU || '-'}</li>
                         <li><i data-lucide="database"></i> ${pc.RAM || '-'}</li>
                     </ul>
-                    <button class="btn btn-outline btn-block">Détails de la config</button>
+                    <button class="btn btn-outline btn-block btn-card">Explorer In-Depth</button>
                 </div>
             `;
             card.addEventListener('click', () => openModal(pc));
@@ -200,23 +205,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${thumbsHtml}
             </div>
             <div class="modal-details">
-                <span class="pc-status">${pc.Statut || 'Disponible'}</span>
                 <h2 class="modal-title">${pc.Nom || 'La Belle Config'}</h2>
                 <div class="modal-price">${pc.Prix || 'N/A'}</div>
                 
                 <div class="specs-grid">
                     <div class="spec-item"><i data-lucide="cpu"></i><div class="spec-content"><h4>Processeur</h4><p>${pc.CPU || '-'}</p></div></div>
                     <div class="spec-item"><i data-lucide="monitor"></i><div class="spec-content"><h4>Carte Graphique</h4><p>${pc.GPU || '-'}</p></div></div>
-                    <div class="spec-item"><i data-lucide="database"></i><div class="spec-content"><h4>Mémoire RAM</h4><p>${pc.RAM || '-'}</p></div></div>
+                    <div class="spec-item"><i data-lucide="server"></i><div class="spec-content"><h4>Mémoire RAM</h4><p>${pc.RAM || '-'}</p></div></div>
                     <div class="spec-item"><i data-lucide="hard-drive"></i><div class="spec-content"><h4>Stockage</h4><p>${pc.Stockage || '-'}</p></div></div>
-                    <div class="spec-item"><i data-lucide="server"></i><div class="spec-content"><h4>Carte Mère</h4><p>${pc["Carte mère"] || '-'}</p></div></div>
-                    <div class="spec-item"><i data-lucide="wind"></i><div class="spec-content"><h4>Refroidissement</h4><p>${pc.Refroidissement || '-'}</p></div></div>
-                    <div class="spec-item"><i data-lucide="plug"></i><div class="spec-content"><h4>Alimentation</h4><p>${pc.Alimentation || '-'}</p></div></div>
-                    <div class="spec-item"><i data-lucide="box"></i><div class="spec-content"><h4>Système d'exploitation</h4><p>${pc["OS installé"] || '-'}</p></div></div>
+                    <div class="spec-item"><i data-lucide="layout"></i><div class="spec-content"><h4>Carte Mère</h4><p>${pc["Carte mère"] || '-'}</p></div></div>
+                    <div class="spec-item"><i data-lucide="thermometer-snowflake"></i><div class="spec-content"><h4>Refroidissement</h4><p>${pc.Refroidissement || '-'}</p></div></div>
+                    <div class="spec-item"><i data-lucide="zap"></i><div class="spec-content"><h4>Alimentation</h4><p>${pc.Alimentation || '-'}</p></div></div>
+                    <div class="spec-item"><i data-lucide="monitor-play"></i><div class="spec-content"><h4>Système d'exploitation</h4><p>${pc["OS installé"] || '-'}</p></div></div>
                 </div>
 
-                <a href="${pc.VintedURL || '#'}" target="_blank" class="btn btn-cyan btn-block btn-lg" ${!pc.VintedURL ? 'disabled' : ''}>
-                    Acheter sur Vinted <i data-lucide="external-link"></i>
+                <a href="${pc.VintedURL || '#'}" target="_blank" class="btn btn-cyan btn-block btn-lg tech-btn" ${!pc.VintedURL ? 'disabled' : ''}>
+                    Acheter en ligne <i data-lucide="external-link"></i>
                 </a>
             </div>
         `;

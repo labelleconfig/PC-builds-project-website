@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <!-- Lucide Icons -->
@@ -26,20 +26,35 @@
 </head>
 
 <body>
-    <div class="background-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+    <!-- Premium Dark Background -->
+    <div class="site-bg">
+        <div class="grid-overlay"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
     </div>
+
+    <!-- Navigation -->
     <nav class="navbar glass">
         <div class="container nav-container">
             <div class="logo">
-                <i data-lucide="cpu" class="text-cyan"></i>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="logo-icon text-cyan">
+                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <line x1="9" y1="1" x2="9" y2="4"></line>
+                    <line x1="15" y1="1" x2="15" y2="4"></line>
+                    <line x1="9" y1="20" x2="9" y2="23"></line>
+                    <line x1="15" y1="20" x2="15" y2="23"></line>
+                    <line x1="20" y1="9" x2="23" y2="9"></line>
+                    <line x1="20" y1="14" x2="23" y2="14"></line>
+                    <line x1="1" y1="9" x2="4" y2="9"></line>
+                    <line x1="1" y1="14" x2="4" y2="14"></line>
+                </svg>
                 <span>La Belle Config</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#adn">Notre ADN</a></li>
-                <li><a href="#catalogue">Catalogue PC</a></li>
+                <li><a href="#adn">Philosophie</a></li>
+                <li><a href="#catalogue">Catalogue</a></li>
                 <li><a href="#sur-demande" class="btn btn-sm btn-cyan">Sur Demande</a></li>
             </ul>
             <div class="menu-toggle">
@@ -47,154 +62,233 @@
             </div>
         </div>
     </nav>
+
+    <!-- Split Screen Hero -->
     <header class="hero" id="home">
-        <div class="container hero-container fade-in-up">
-            <span class="hero-tagline">/// L'assemblage sans compromis</span>
-            <h1 class="hero-title">
-                Zéro marketing.<br>
-                <span class="text-gradient">100 % perfs.</span>
-            </h1>
-            <p class="hero-subtitle">
-                Ton prochain PC Gaming, pensé et assemblé comme si c'était le nôtre. Obtiens le meilleur rapport FPS/prix du marché avec nos configs optimisées et testées à fond.
-            </p>
-            <div class="hero-buttons">
-                <a href="#catalogue" class="btn btn-cyan btn-lg">Voir les configs</a>
-                <a href="#sur-demande" class="btn btn-outline btn-lg glass">PC sur demande</a>
+        <div class="hero-split">
+            <!-- Left Side: Gaming -->
+            <div class="hero-pane pane-gaming">
+                <div class="pane-content fade-in-up">
+                    <span class="pane-badge">/// PURE GAMING</span>
+                    <h1 class="hero-title">
+                        Le PC Gamer à l'état pur.<br>
+                        <span class="text-cyan">100% perfs.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Zéro blabla marketing. Des configurations équilibrées au
+                        millimètre pour exploser votre framerate sans faire exploser votre budget.
+                    </p>
+                    <a href="#catalogue" class="btn btn-cyan btn-lg">Voir les configs Gaming</a>
+                </div>
+            </div>
+
+            <!-- Right Side: Creation / Pro -->
+            <div class="hero-pane pane-pro">
+                <div class="pane-content fade-in-up" data-delay="150">
+                    <span class="pane-badge badge-pro">/// STATION DE TRAVAIL</span>
+                    <h1 class="hero-title">
+                        L'outil de travail.<br>
+                        <span class="text-white">Puissance & Silence.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Alliez vitesse d'exécution et confort d'utilisation. Des PC conçus pour absorber vos charges de
+                        travail les plus lourdes, jour après jour, sans le moindre accroc.
+                    </p>
+                    <a href="#sur-demande" class="btn btn-outline btn-lg">Configurer une Workstation</a>
+                </div>
             </div>
         </div>
     </header>
+
+    <!-- Trust Badges Bar -->
+    <div class="trust-bar glass">
+        <div class="container trust-container fade-in-up">
+            <div class="trust-item">
+                <i data-lucide="shield-check" class="text-cyan"></i>
+                <div class="trust-text">
+                    <strong>Paiement Sécurisé</strong>
+                    <span>Transactions chiffrées de bout en bout</span>
+                </div>
+            </div>
+            <div class="trust-separator"></div>
+            <div class="trust-item">
+                <i data-lucide="wrench" class="text-cyan"></i>
+                <div class="trust-text">
+                    <strong>Garantie Pièces & Main d'œuvre</strong>
+                    <span>Support technique ultra-réactif</span>
+                </div>
+            </div>
+            <div class="trust-separator"></div>
+            <div class="trust-item">
+                <i data-lucide="map-pin" class="text-cyan"></i>
+                <div class="trust-text">
+                    <strong>Assemblé en France</strong>
+                    <span>Montage rigoureux en atelier local</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADN / Philosophie -->
     <section id="adn" class="section">
         <div class="container">
             <div class="section-header fade-in-up">
-                <h2>Notre Philosophie</h2>
-                <p>Oubliez les PC montés à la chaîne. Ici, on assemble par passion.</p>
+                <h2 class="section-title">L'ingénierie avant tout.</h2>
+                <p class="section-subtitle">Chaque composant est sélectionné sur ses capacités thermiques, acoustiques
+                    et de performance. Pas de fioritures RGB inutiles.</p>
             </div>
             <div class="adn-grid">
                 <div class="adn-card glass fade-in-up" data-delay="100">
-                    <div class="icon-wrapper">
-                        <i data-lucide="zap"></i>
+                    <div class="icon-box">
+                        <i data-lucide="thermometer"></i>
                     </div>
-                    <h3>Zéro Bottleneck</h3>
-                    <p>Chaque composant est minutieusement choisi pour s'exprimer pleinement. Pas de goulot
-                        d'étranglement, que des performances pures.</p>
+                    <h3>Thermiques maîtrisées</h3>
+                    <p>Airflow optimisé, pâte thermique premium et courbes de ventilation profilées sur-mesure pour un
+                        ratio bruit/température chirurgical.</p>
                 </div>
                 <div class="adn-card glass fade-in-up" data-delay="200">
-                    <div class="icon-wrapper">
-                        <i data-lucide="shield-check"></i>
+                    <div class="icon-box">
+                        <i data-lucide="cpu"></i>
                     </div>
-                    <h3>Stress-tests validés</h3>
-                    <p>On ne livre rien au hasard. Chaque machine subit des tests de charge intenses pour garantir une
-                        stabilité à toute épreuve.</p>
+                    <h3>Zéro Bottleneck</h3>
+                    <p>Équilibre parfait entre le CPU et le GPU. Votre machine donne son plein potentiel sans jamais
+                        être bridée par un composant faible.</p>
                 </div>
                 <div class="adn-card glass fade-in-up" data-delay="300">
-                    <div class="icon-wrapper">
-                        <i data-lucide="wallet"></i>
+                    <div class="icon-box">
+                        <i data-lucide="activity"></i>
                     </div>
-                    <h3>Le juste prix</h3>
-                    <p>Notre but : vous offrir le meilleur framerate pour votre budget. Des marges honnêtes pour des
-                        setups imbattables.</p>
+                    <h3>Tests en Laboratoire</h3>
+                    <p>Chaque configuration subit des stress-tests extrêmes (Cinebench, FurMark, OCCT) pour garantir une
+                        stabilité à toute épreuve.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section id="catalogue" class="section bg-darker">
+
+    <!-- Catalogue -->
+    <section id="catalogue" class="section bg-darker border-top">
         <div class="container">
             <div class="section-header fade-in-up">
-                <h2>Nos PC prémontés</h2>
-                <p>Découvrez notre gamme de PC prêts à être expédiés.</p>
+                <h2 class="section-title">Catalogue Prémonté</h2>
+                <p class="section-subtitle">Expédition sous 48h. Conçu selon nos standards d'exigence.</p>
             </div>
             <div id="pc-grid" class="catalogue-grid">
+                <!-- Injected via JS -->
                 <div class="loader-container">
-                    <i data-lucide="loader" class="spinner"></i>
-                    <p>Chargement du catalogue...</p>
+                    <div class="tech-loader"></div>
+                    <p>Synchronisation base de données...</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal Product -->
     <div id="pc-modal" class="modal">
         <div class="modal-backdrop"></div>
-        <div class="modal-content glass">
+        <div class="modal-content glass panel-border">
             <button class="modal-close"><i data-lucide="x"></i></button>
             <div class="modal-body" id="modal-body-content"></div>
         </div>
     </div>
-    <section id="sur-demande" class="section">
+
+    <!-- PC Sur Demande -->
+    <section id="sur-demande" class="section border-top">
         <div class="container">
-            <div class="form-container glass fade-in-up">
+            <div class="form-wrapper glass fade-in-up">
                 <div class="form-header">
-                    <h2>On te monte ça sur mesure.</h2>
-                    <p>Confiez-nous vos envies, nous concevrons la machine parfaite pour vous.</p>
+                    <h2 class="section-title">Configuration sur-mesure</h2>
+                    <p class="section-subtitle">Décrivez votre projet. Un expert reviendra vers vous avec la
+                        configuration optimale au composant près.</p>
                 </div>
-                <form id="custom-pc-form">
-                    <div class="form-row">
-                        <div class="form-group">
+
+                <!-- FORMULAIRE (NE PAS MODIFIER LES IDS/NAMES) -->
+                <form id="custom-pc-form" class="tech-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <input type="text" id="prenom" name="Prénom" required placeholder=" ">
                             <label for="prenom">Prénom *</label>
-                            <input type="text" id="prenom" name="Prénom" required placeholder="John">
+                            <div class="input-line"></div>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="nom" name="Nom" required placeholder=" ">
                             <label for="nom">Nom *</label>
-                            <input type="text" id="nom" name="Nom" required placeholder="Doe">
+                            <div class="input-line"></div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
+
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <input type="email" id="email" name="Email" required placeholder=" ">
                             <label for="email">Email *</label>
-                            <input type="email" id="email" name="Email" required placeholder="john@example.com">
+                            <div class="input-line"></div>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="tel" id="tel" name="Tél." placeholder=" ">
                             <label for="tel">Téléphone</label>
-                            <input type="tel" id="tel" name="Tél." placeholder="06 XX XX XX XX">
+                            <div class="input-line"></div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
+
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <input type="text" id="ville" name="Ville" required placeholder=" ">
                             <label for="ville">Ville *</label>
-                            <input type="text" id="ville" name="Ville" required placeholder="Paris">
+                            <div class="input-line"></div>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="cp" name="CP" required placeholder=" ">
                             <label for="cp">Code Postal *</label>
-                            <input type="text" id="cp" name="CP" required placeholder="75000">
+                            <div class="input-line"></div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="usage">Usage principal *</label>
+
+                    <div class="form-grid">
+                        <div class="input-group select-group">
                             <select id="usage" name="Usage" required>
-                                <option value="" disabled selected>Sélectionnez un usage...</option>
-                                <option value="Jeux compétitifs">Jeux compétitifs</option>
-                                <option value="Jeux lourds AAA">Jeux lourds AAA</option>
+                                <option value="" disabled selected>Sélectionnez...</option>
+                                <option value="Jeux compétitifs">Jeux compétitifs (CS:GO, Valorant...)</option>
+                                <option value="Jeux lourds AAA">Jeux lourds AAA (Cyberpunk...)</option>
                                 <option value="Création">Création (Montage vidéo, 3D...)</option>
-                                <option value="Pro">Utilisation Pro / Bureautique</option>
+                                <option value="Pro">Utilisation Pro / Bureautique Intensive</option>
                             </select>
+                            <label for="usage" class="select-label">Usage principal *</label>
+                            <i data-lucide="chevron-down" class="select-icon"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="resolution">Résolution cible *</label>
+                        <div class="input-group select-group">
                             <select id="resolution" name="Résolution" required>
-                                <option value="" disabled selected>Votre écran actuel / futur...</option>
+                                <option value="" disabled selected>Sélectionnez...</option>
                                 <option value="1080p">1080p (Full HD)</option>
                                 <option value="1440p-2K">1440p (2K)</option>
                                 <option value="4K">4K (Ultra HD)</option>
                             </select>
+                            <label for="resolution" class="select-label">Résolution cible *</label>
+                            <i data-lucide="chevron-down" class="select-icon"></i>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="jeux">Vos jeux / logiciels principaux *</label>
-                        <input type="text" id="jeux" name="Jeux principaux" required
-                            placeholder="Ex: Warzone, Blender, Premiere Pro...">
+
+                    <div class="input-group">
+                        <input type="text" id="jeux" name="Jeux principaux" required placeholder=" ">
+                        <label for="jeux">Logiciels / Jeux principaux visés *</label>
+                        <div class="input-line"></div>
                     </div>
-                    <div class="form-group">
+
+                    <div class="input-group">
+                        <input type="number" id="budget" name="Budget estimé" required placeholder=" " min="100">
                         <label for="budget">Budget estimé (€) *</label>
-                        <input type="number" id="budget" name="Budget estimé" required
-                            placeholder="Ex: 750 / Entre 350 et 500" min="100">
+                        <div class="input-line"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="attentes">Tes attentes spécifiques</label>
-                        <textarea id="attentes" name="Souhaits supp." rows="4"
-                            placeholder="RGB à fond ? Full black silence ? Dis-nous tout !"></textarea>
+
+                    <div class="input-group">
+                        <textarea id="attentes" name="Souhaits supp." rows="4" placeholder=" "></textarea>
+                        <label for="attentes">Demandes spécifiques (Esthétique, silence, connectique...)</label>
+                        <div class="input-line"></div>
                     </div>
+
                     <div class="form-footer">
-                        <button type="submit" id="submit-btn" class="btn btn-cyan btn-block btn-lg">
-                            <span class="btn-text">Envoyer la demande</span>
+                        <button type="submit" id="submit-btn" class="btn btn-cyan btn-block btn-xl tech-btn">
+                            <span class="btn-text">Envoyer pour conception</span>
+                            <i data-lucide="cpu" class="btn-icon"></i>
                             <i data-lucide="loader" class="btn-spinner spinner" style="display: none;"></i>
                         </button>
                         <div id="form-msg" class="form-message"></div>
@@ -203,14 +297,27 @@
             </div>
         </div>
     </section>
+
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
                 <div class="logo">
-                    <i data-lucide="cpu" class="text-cyan"></i>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="logo-icon text-cyan">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                        <line x1="20" y1="9" x2="23" y2="9"></line>
+                        <line x1="20" y1="14" x2="23" y2="14"></line>
+                        <line x1="1" y1="9" x2="4" y2="9"></line>
+                        <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg>
                     <span>La Belle Config</span>
                 </div>
-                <p>Des PC durables à bon prix</p>
+                <p>L'excellence de l'assemblage PC.</p>
             </div>
             <div class="footer-socials">
                 <a href="#" class="social-icon" title="Instagram"><i data-lucide="instagram"></i></a>
@@ -221,10 +328,11 @@
                         data-lucide="mail"></i></a>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-bottom border-top">
             <p>&copy; 2026 La Belle Config. Tous droits réservés.</p>
         </div>
     </footer>
+
     <script src="script.js"></script>
     <script>lucide.createIcons();</script>
 </body>
