@@ -83,33 +83,62 @@ document.addEventListener('DOMContentLoaded', () => {
     let pcData = [];
 
     function parseCSV(text) {
-        const rows = text.split('\n');
-        const headers = rows[0].split(',').map(h => h.trim());
+        const rows = [];
+        let currentRow = [];
+        let currentCell = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            let nextChar = text[i + 1];
+
+            if (char === '"') {
+                if (inQuotes && nextChar === '"') {
+                    currentCell += '"'; // Escaped quote inside quotes
+                    i++; // Skip the second quote
+                } else {
+                    inQuotes = !inQuotes; // Toggle quote state
+                }
+            } else if (char === ',' && !inQuotes) {
+                currentRow.push(currentCell);
+                currentCell = '';
+            } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                if (char === '\r' && nextChar === '\n') {
+                    i++; // Skip newline of CRLF
+                }
+                currentRow.push(currentCell);
+                rows.push(currentRow);
+                currentRow = [];
+                currentCell = '';
+            } else {
+                currentCell += char;
+            }
+        }
+        
+        // Push the last cell/row if not empty
+        if (currentCell !== '' || currentRow.length > 0) {
+            currentRow.push(currentCell);
+            rows.push(currentRow);
+        }
+
+        if (rows.length === 0) return [];
+
+        const headers = rows[0].map(h => h.trim());
         const data = [];
 
         for (let i = 1; i < rows.length; i++) {
-            if (!rows[i].trim()) continue;
-            let obj = {};
-            let currentLine = rows[i];
-            let inQuotes = false;
-            let val = '';
-            let col = 0;
+            // Check if row is completely empty
+            if (rows[i].length === 0 || (rows[i].length === 1 && rows[i][0].trim() === '')) continue;
             
-            for (let c = 0; c < currentLine.length; c++) {
-                let char = currentLine[c];
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    if (headers[col]) obj[headers[col]] = val.trim();
-                    val = '';
-                    col++;
-                } else {
-                    val += char;
+            let obj = {};
+            for (let j = 0; j < headers.length; j++) {
+                if (headers[j]) {
+                    obj[headers[j]] = (rows[i][j] || '').trim();
                 }
             }
-            if(headers[col]) obj[headers[col]] = val.trim();
             data.push(obj);
         }
+
         return data;
     }
 
