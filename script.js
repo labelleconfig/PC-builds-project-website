@@ -2,13 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.querySelector('.navbar');
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
-    
+
     // 1. Navbar Scroll Effect & Mobile Shrinking Pill
     let lastScrollY = window.scrollY;
-    
+
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        
+
         // General background
         if (currentScrollY > 50) {
             navbar.classList.add('scrolled');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!navbar.classList.contains('mobile-collapsed')) {
                     navbar.classList.add('mobile-collapsed');
                     menuToggle.innerHTML = `<i data-lucide="arrow-up"></i>`;
-                    if(window.lucide) lucide.createIcons();
+                    if (window.lucide) lucide.createIcons();
                 }
             } else if (currentScrollY < lastScrollY || currentScrollY <= 150) {
                 // Scrolling Up -> Expand back
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Retain correct icon if menu is active or not
                     const iconName = navLinks.classList.contains('active') ? 'x' : 'menu';
                     menuToggle.innerHTML = `<i data-lucide="${iconName}"></i>`;
-                    if(window.lucide) lucide.createIcons();
+                    if (window.lucide) lucide.createIcons();
                 }
             }
         }
@@ -47,12 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
-        
+
         navLinks.classList.toggle('active');
         const iconName = navLinks.classList.contains('active') ? 'x' : 'menu';
         menuToggle.innerHTML = `<i data-lucide="${iconName}"></i>`;
         document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-        if(window.lucide) lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.remove('active');
             menuToggle.innerHTML = `<i data-lucide="menu"></i>`;
             document.body.style.overflow = '';
-            if(window.lucide) lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         });
     });
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentRow = [];
         let currentCell = '';
         let inQuotes = false;
-        
+
         for (let i = 0; i < text.length; i++) {
             let char = text[i];
             let nextChar = text[i + 1];
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentCell += char;
             }
         }
-        
+
         // Push the last cell/row if not empty
         if (currentCell !== '' || currentRow.length > 0) {
             currentRow.push(currentCell);
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 1; i < rows.length; i++) {
             // Check if row is completely empty
             if (rows[i].length === 0 || (rows[i].length === 1 && rows[i][0].trim() === '')) continue;
-            
+
             let obj = {};
             for (let j = 0; j < headers.length; j++) {
                 if (headers[j]) {
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCatalogue(data) {
         const grid = document.getElementById('pc-grid');
-        grid.innerHTML = ''; 
+        grid.innerHTML = '';
 
         data.forEach((pc, index) => {
             const imageField = pc['Toutes les Images'] || pc['ImageURL (3 max)'] || pc.ImageURL;
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'pc-card glass fade-in-up visible';
             card.style.animationDelay = `${index * 100}ms`;
-            
+
             const statusClass = pc.Statut && pc.Statut.toLowerCase().includes('premium') ? 'premium' : '';
             card.innerHTML = `
                 <div class="pc-card-img-wrapper">
@@ -185,13 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <li><i data-lucide="monitor"></i> ${pc.GPU || '-'}</li>
                         <li><i data-lucide="database"></i> ${pc.RAM || '-'}</li>
                     </ul>
-                    <button class="btn btn-outline btn-block btn-card">Explorer In-Depth</button>
+                    <button class="btn btn-outline btn-block btn-card">Voir</button>
                 </div>
             `;
             card.addEventListener('click', () => openModal(pc));
             grid.appendChild(card);
         });
-        if(window.lucide) lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
     }
 
     // 4. Modal Logic
@@ -202,10 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal(pc) {
         const imageField = pc['Toutes les Images'] || pc['ImageURL (3 max)'] || pc.ImageURL;
         const imageUrls = imageField ? imageField.split(/[,;]/).map(u => u.trim()).filter(u => u) : ['https://via.placeholder.com/800x600?text=No+Image'];
-        
+
         const displayUrls = imageUrls.slice(0, 3);
         const extraUrls = imageUrls.slice(3);
-        
+
         let imagesHtml = '';
         let layoutClass = 'layout-1';
 
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </a>
             </div>
         `;
-        
+
         const mainImg = modalBody.querySelector('.main-img');
         const thumbs = modalBody.querySelectorAll('.thumb-img');
         if (mainImg && thumbs.length > 0) {
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        if(window.lucide) lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -291,10 +291,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const btnText = submitBtn.querySelector('.btn-text');
         const spinner = submitBtn.querySelector('.btn-spinner');
-        
+
         submitBtn.disabled = true;
         btnText.style.display = 'none';
         spinner.style.display = 'inline-block';
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formMsg.textContent = 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer plus tard.';
             formMsg.className = 'form-message error';
             formMsg.style.display = 'block';
-            
+
             submitBtn.disabled = false;
             btnText.style.display = 'inline-block';
             spinner.style.display = 'none';
@@ -343,10 +343,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const startY = window.scrollY;
             if (startY <= 0) return;
-            
+
             const html = document.documentElement;
             html.style.scrollBehavior = 'auto'; // Disable native CSS smooth scroll temporarily
-            
+
             const duration = 1200; // 1.2s specific bell curve easing
             const startTime = performance.now();
 
