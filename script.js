@@ -78,80 +78,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
     document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
 
-    // 3. Catalogue Loader (Google Sheets CSV Parsing)
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTswf7BIX85o6Cgat-DT5KGd_ZH5A1_G5UrJLxcBT_6MNjb2MgWzB-x4ptjS_MTfH-BpBVhHUnMhP5x/pub?gid=0&single=true&output=csv';
+    // 3. Catalogue Loader (Supabase Integration)
+    const SUPABASE_URL = 'https://pnnuqntyhvrbzikaktuu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBubnVxbnR5aHZyYnppa2FrdHV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MDU5MDksImV4cCI6MjA5Mjk4MTkwOX0.7k4RbANKhf95bw9y63qyVXWoiX8Op8Tx0uC37oVeanQ';
+    
+    // Initialize Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let pcData = [];
 
-    function parseCSV(text) {
-        const rows = [];
-        let currentRow = [];
-        let currentCell = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < text.length; i++) {
-            let char = text[i];
-            let nextChar = text[i + 1];
-
-            if (char === '"') {
-                if (inQuotes && nextChar === '"') {
-                    currentCell += '"'; // Escaped quote inside quotes
-                    i++; // Skip the second quote
-                } else {
-                    inQuotes = !inQuotes; // Toggle quote state
+    /**
+     * Mapper : Convertit les données relationnelles de Supabase vers l'interface attendue par la vue (UI).
+     */
+    function mapSupabaseToPC(build) {
+        const c = build.components || [];
+        
+        // Aplatir le tableau de composants
+        let compObj = {};
+        if (Array.isArray(c)) {
+            c.forEach(comp => {
+                if (comp.category && comp.exact_name) {
+                    compObj[comp.category.toLowerCase()] = comp.exact_name;
                 }
-            } else if (char === ',' && !inQuotes) {
-                currentRow.push(currentCell);
-                currentCell = '';
-            } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                if (char === '\r' && nextChar === '\n') {
-                    i++; // Skip newline of CRLF
-                }
-                currentRow.push(currentCell);
-                rows.push(currentRow);
-                currentRow = [];
-                currentCell = '';
-            } else {
-                currentCell += char;
-            }
+            });
         }
 
-        // Push the last cell/row if not empty
-        if (currentCell !== '' || currentRow.length > 0) {
-            currentRow.push(currentCell);
-            rows.push(currentRow);
+        // Construire les URLs d'images complètes (utilisation d'un bucket supposé "builds" ou "images")
+        // Note: Si les images ne s'affichent pas, il faudra ajuster le nom du bucket
+        const bucketName = 'build-images'; // <-- Le vrai nom de votre bucket
+        let imageUrls = [];
+        if (Array.isArray(build.image_paths) && build.image_paths.length > 0) {
+            imageUrls = build.image_paths.map(path => {
+                return supabase.storage.from(bucketName).getPublicUrl(path).data.publicUrl;
+            });
         }
 
-        if (rows.length === 0) return [];
-
-        const headers = rows[0].map(h => h.trim());
-        const data = [];
-
-        for (let i = 1; i < rows.length; i++) {
-            // Check if row is completely empty
-            if (rows[i].length === 0 || (rows[i].length === 1 && rows[i][0].trim() === '')) continue;
-
-            let obj = {};
-            for (let j = 0; j < headers.length; j++) {
-                if (headers[j]) {
-                    obj[headers[j]] = (rows[i][j] || '').trim();
-                }
-            }
-            data.push(obj);
-        }
-
-        return data;
+        return {
+            Nom: build.name || 'PC Inconnu',
+            Prix: build.public_price ? `${build.public_price} €` : 'N/A',
+            Statut: build.status === 'en_ligne' ? 'Disponible' : build.status === 'vendu' ? 'Vendu' : build.status,
+            ImageURL: imageUrls.join(';') || '',
+            VintedURL: build.vinted_url || '',
+            
+            // Composants mappés selon la "category"
+            CPU: compObj.cpu || '-',
+            GPU: compObj.gpu || '-',
+            RAM: compObj.ram || '-',
+            Stockage: compObj.stockage || '-',
+            "Carte mère": compObj.cm || '-',
+            Refroidissement: compObj.refroidissement || '-',
+            Alimentation: compObj.alim || '-',
+            "OS installé": compObj.os || '-'
+        };
     }
 
     async function loadCatalogue() {
         const grid = document.getElementById('pc-grid');
         try {
-            const response = await fetch(CSV_URL);
-            if (!response.ok) throw new Error('Network error');
-            const csvText = await response.text();
-            pcData = parseCSV(csvText);
+            // Fetch depuis Supabase : table builds, jointure avec components, et filtre sur status
+            const { data, error } = await supabase
+                .from('builds')
+                .select('*, components(*)')
+                .in('status', ['en_ligne', 'vendu']);
+
+            if (error) throw error;
+            
+            // Map the data
+            pcData = (data || []).map(mapSupabaseToPC);
+            
+            // Render the UI
             renderCatalogue(pcData);
         } catch (error) {
-            console.error('Erreur:', error);
+            console.error('Erreur Supabase:', error);
+            if (error.code === '42501') {
+                console.warn('Problème de permissions détecté : Assurez-vous d\'avoir exécuté "GRANT SELECT ON public.builds TO anon;" dans Supabase.');
+            }
             grid.innerHTML = '<div class="loader-container"><p class="text-secondary">Impossible de charger le catalogue. Réessayez plus tard.</p></div>';
         }
     }
