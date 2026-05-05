@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi de commande | La Belle Config</title>
+  <meta name="description" content="Suivez l'avancement de votre PC sur mesure La Belle Config.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-black font-sans text-zinc-100 antialiased">
+  <main class="relative min-h-screen overflow-hidden">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(39,39,42,0.42)_1px,transparent_1px),linear-gradient(to_bottom,rgba(39,39,42,0.42)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent"></div>
+
+    <section class="relative mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 py-8 sm:px-8">
+      <header class="flex items-center justify-between gap-4">
+        <a class="flex items-center gap-3" href="/">
+          <img class="h-10 w-10 rounded-lg border border-cyan-300/25 bg-zinc-950 object-contain p-1" src="logo2-labelleconfig.png" alt="La Belle Config">
+          <div>
+            <p class="text-sm font-bold text-white">La Belle Config</p>
+            <p class="text-xs text-zinc-500">Suivi atelier</p>
+          </div>
+        </a>
+        <span class="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-medium text-cyan-200">
+          Commande PC
+        </span>
+      </header>
+
+      <div class="flex flex-1 items-center py-10">
+        <div class="w-full rounded-xl border border-zinc-800 bg-zinc-950/90 p-5 shadow-2xl shadow-black/40 sm:p-8">
+          <div id="loading-state" class="flex min-h-80 flex-col items-center justify-center text-center">
+            <div class="mb-5 h-10 w-10 animate-spin rounded-full border-2 border-zinc-800 border-t-cyan-300"></div>
+            <p class="text-lg font-semibold text-white">Chargement du suivi...</p>
+            <p class="mt-2 text-sm text-zinc-500">On récupère l'état d'avancement en atelier.</p>
+          </div>
+
+          <div id="error-state" class="hidden min-h-80 flex-col items-center justify-center text-center">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-red-300/25 bg-red-300/10 text-2xl">!</div>
+            <h1 class="text-2xl font-bold text-white">Suivi introuvable</h1>
+            <p id="error-message" class="mt-3 max-w-md text-sm leading-6 text-zinc-400">
+              Le lien de suivi semble incomplet ou invalide.
+            </p>
+            <a class="mt-6 rounded-md border border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-cyan-300/50 hover:text-cyan-100" href="/">
+              Retour au site
+            </a>
+          </div>
+
+          <div id="tracking-state" class="hidden">
+            <div class="border-b border-zinc-800 pb-6">
+              <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300">Tracker de commande</p>
+              <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                Ton PC avance, <span id="client-name" class="text-cyan-200">Client</span>.
+              </h1>
+              <p class="mt-4 text-sm leading-6 text-zinc-400">
+                On met ce suivi à jour à chaque étape importante de la préparation de ta configuration.
+              </p>
+              <div class="mt-5 inline-flex rounded-full border border-zinc-800 bg-black/40 px-3 py-1 text-sm text-zinc-300">
+                Statut actuel : <span id="current-status" class="ml-1 font-semibold text-white"></span>
+              </div>
+            </div>
+
+            <ol id="timeline" class="mt-7 space-y-5"></ol>
+
+            <div id="ready-message" class="mt-7 hidden rounded-lg border border-emerald-300/25 bg-emerald-300/10 p-4 text-sm leading-6 text-emerald-100">
+              <strong>Ton PC est prêt !</strong> Le suivi de livraison en temps réel est maintenant disponible sur Vinted/Leboncoin.
+            </div>
+
+            <p class="mt-7 text-xs leading-5 text-zinc-500">
+              Pour toute question, réponds simplement au dernier message de l'équipe La Belle Config.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const statusRank = {
+      "Nouvelle": 0,
+      "Devis envoyé": 1,
+      "Réponse reçue ⚠️": 2,
+      "Validée": 3,
+      "Pièces commandées": 4,
+      "En montage": 5,
+      "En test": 6,
+      "Expédiée": 7,
+    };
+
+    const steps = [
+      {
+        title: "Commande validée",
+        description: "La configuration est confirmée et passe en préparation.",
+        minStatus: "Validée",
+      },
+      {
+        title: "Commande des composants",
+        description: "Les pièces nécessaires sont commandées ou réservées en stock.",
+        minStatus: "Pièces commandées",
+      },
+      {
+        title: "Assemblage par nos experts",
+        description: "Montage propre, câble management et vérifications matérielles.",
+        minStatus: "En montage",
+      },
+      {
+        title: "Stress-test & Installation",
+        description: "Windows, pilotes, benchs, températures et stabilité sont contrôlés.",
+        minStatus: "En test",
+      },
+      {
+        title: "Prêt pour l'expédition",
+        description: "La machine est prête à partir vers toi.",
+        minStatus: "Expédiée",
+      },
+    ];
+
+    const loadingState = document.getElementById("loading-state");
+    const errorState = document.getElementById("error-state");
+    const trackingState = document.getElementById("tracking-state");
+    const errorMessage = document.getElementById("error-message");
+    const timeline = document.getElementById("timeline");
+    const readyMessage = document.getElementById("ready-message");
+
+    function showError(message) {
+      loadingState.classList.add("hidden");
+      errorState.classList.remove("hidden");
+      errorState.classList.add("flex");
+      trackingState.classList.add("hidden");
+      errorMessage.textContent = message;
+    }
+
+    function renderTracking(payload) {
+      const currentRank = statusRank[payload.status] ?? 0;
+
+      document.getElementById("client-name").textContent = payload.client_name || "Client";
+      document.getElementById("current-status").textContent = payload.status || "En attente";
+
+      timeline.innerHTML = "";
+      steps.forEach((step, index) => {
+        const isDone = currentRank >= statusRank[step.minStatus];
+        const isLast = index === steps.length - 1;
+        const item = document.createElement("li");
+        item.className = "relative flex gap-4";
+        item.innerHTML = `
+          <div class="flex flex-col items-center">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-bold transition ${
+              isDone
+                ? "border-cyan-300 bg-cyan-300 text-black shadow-[0_0_24px_rgba(34,211,238,0.28)]"
+                : "border-zinc-800 bg-black text-zinc-600"
+            }">${isDone ? "✓" : index + 1}</div>
+            ${isLast ? "" : `<div class="mt-2 h-14 w-px ${isDone ? "bg-cyan-300/55" : "bg-zinc-800"}"></div>`}
+          </div>
+          <div class="pb-5">
+            <h2 class="${isDone ? "text-white" : "text-zinc-500"} text-base font-semibold">${step.title}</h2>
+            <p class="mt-1 text-sm leading-6 ${isDone ? "text-zinc-300" : "text-zinc-600"}">${step.description}</p>
+          </div>
+        `;
+        timeline.appendChild(item);
+      });
+
+      if (payload.status === "Expédiée") {
+        readyMessage.classList.remove("hidden");
+      }
+
+      loadingState.classList.add("hidden");
+      errorState.classList.add("hidden");
+      trackingState.classList.remove("hidden");
+    }
+
+    async function init() {
+      const id = new URLSearchParams(window.location.search).get("id");
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      if (!id || !uuidPattern.test(id)) {
+        showError("Le lien ne contient pas d'identifiant de suivi valide.");
+        return;
+      }
+
+      const { data, error } = await supabase.rpc("get_tracking_info", {
+        p_demande_id: id,
+      });
+
+      if (error) {
+        showError("Impossible de charger ce suivi pour le moment. Réessaie dans quelques minutes.");
+        return;
+      }
+
+      const payload = Array.isArray(data) ? data[0] : data;
+
+      if (!payload) {
+        showError("Aucune commande ne correspond à ce lien de suivi.");
+        return;
+      }
+
+      renderTracking(payload);
+    }
+
+    init();
+  </script>
+</body>
+</html>
