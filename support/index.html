@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support & SAV | La Belle Config</title>
+  <meta name="description" content="Support technique La Belle Config : aide au démarrage, câblage, SAV, FAQ et contact email.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          boxShadow: {
+            glow: "0 0 34px rgba(34, 211, 238, 0.18)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-black font-sans text-zinc-100 antialiased">
+  <main class="relative min-h-screen overflow-hidden">
+    <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_34rem),linear-gradient(to_bottom,#030305,#050507_42%,#000)]"></div>
+    <div class="fixed inset-0 -z-10 bg-[linear-gradient(to_right,rgba(39,39,42,0.45)_1px,transparent_1px),linear-gradient(to_bottom,rgba(39,39,42,0.45)_1px,transparent_1px)] bg-[size:42px_42px] opacity-20"></div>
+
+    <section class="mx-auto w-full max-w-5xl px-5 py-7 sm:px-8 sm:py-10">
+      <header class="flex items-center justify-between gap-4">
+        <a class="flex items-center gap-3" href="/">
+          <img class="h-11 w-11 rounded-lg border border-cyan-300/25 bg-zinc-950 object-contain p-1" src="/logo2-labelleconfig.png" alt="La Belle Config">
+          <div>
+            <p class="text-sm font-bold text-white">La Belle Config</p>
+            <p class="text-xs text-zinc-500">Support technique</p>
+          </div>
+        </a>
+        <a class="hidden rounded-md border border-zinc-800 px-3 py-2 text-sm font-semibold text-zinc-300 transition hover:border-cyan-300/50 hover:text-cyan-100 sm:inline-flex" href="/">
+          Retour au site
+        </a>
+      </header>
+
+      <section class="grid gap-5 py-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 shadow-2xl shadow-black/40 sm:p-8">
+          <p class="text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">Support & SAV</p>
+          <h1 class="mt-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+            Une question sur ton PC ?
+          </h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-zinc-400">
+            Si quelque chose te semble bizarre au démarrage, au câblage ou en jeu, écris-nous.
+            On t'aide à diagnostiquer proprement avant de parler réparation.
+          </p>
+
+          <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+            <a
+              class="inline-flex items-center justify-center rounded-md bg-cyan-300 px-5 py-3 text-sm font-bold text-black shadow-glow transition hover:bg-white"
+              href="mailto:labelleconfig@gmail.com?subject=Support%20La%20Belle%20Config%20-%20Besoin%20d'aide&body=Bonjour%20La%20Belle%20Config%2C%0A%0AJ'ai%20besoin%20d'aide%20avec%20mon%20PC.%0A%0ANom%20%3A%0ANum%C3%A9ro%20de%20commande%20ou%20mod%C3%A8le%20du%20PC%20%3A%0AProbl%C3%A8me%20rencontr%C3%A9%20%3A%0AQuand%20est-ce%20que%20le%20probl%C3%A8me%20appara%C3%AEt%20%3F%0APhotos%20ou%20vid%C3%A9os%20jointes%20si%20possible.%0A%0AMerci%20!"
+            >
+              Contacter le support
+            </a>
+            <a
+              class="inline-flex items-center justify-center rounded-md border border-zinc-800 px-5 py-3 text-sm font-bold text-zinc-200 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 hover:text-cyan-100"
+              href="#faq"
+            >
+              Voir la FAQ
+            </a>
+          </div>
+
+          <div class="mt-7 rounded-lg border border-cyan-300/20 bg-cyan-300/[0.06] p-4">
+            <p class="text-sm font-semibold text-cyan-100">Réponse humaine, pas de robot.</p>
+            <p class="mt-1 text-sm leading-6 text-cyan-100/70">
+              Email : <a class="font-semibold text-cyan-100 underline decoration-cyan-300/35 underline-offset-4" href="mailto:labelleconfig@gmail.com">labelleconfig@gmail.com</a>.
+              Ajoute une photo nette de l'arrière du PC et une courte vidéo du souci si possible.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-5 sm:p-6">
+          <p class="text-sm font-bold text-white">Avant de nous écrire</p>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">
+            Ces 4 vérifications règlent la majorité des faux problèmes au déballage.
+          </p>
+
+          <div class="mt-5 space-y-3">
+            <div class="rounded-lg border border-zinc-800 bg-black/35 p-4">
+              <div class="flex gap-3">
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 text-sm font-black text-black">1</span>
+                <div>
+                  <p class="font-semibold text-white">Branche l'écran sur la carte graphique</p>
+                  <p class="mt-1 text-sm leading-6 text-zinc-500">Utilise les ports HDMI/DisplayPort situés plus bas sur la carte graphique, pas ceux de la carte mère.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-zinc-800 bg-black/35 p-4">
+              <div class="flex gap-3">
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 text-sm font-black text-black">2</span>
+                <div>
+                  <p class="font-semibold text-white">Vérifie les interrupteurs</p>
+                  <p class="mt-1 text-sm leading-6 text-zinc-500">Le bouton de l'alimentation à l'arrière doit être sur I, puis le bouton Power en façade lance la machine.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-zinc-800 bg-black/35 p-4">
+              <div class="flex gap-3">
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 text-sm font-black text-black">3</span>
+                <div>
+                  <p class="font-semibold text-white">Laisse le premier démarrage respirer</p>
+                  <p class="mt-1 text-sm leading-6 text-zinc-500">Le premier boot peut prendre un peu plus de temps après transport. Attends 2 à 3 minutes avant de couper.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-zinc-800 bg-black/35 p-4">
+              <div class="flex gap-3">
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-cyan-300 text-sm font-black text-black">4</span>
+                <div>
+                  <p class="font-semibold text-white">Ne démonte pas sans nous prévenir</p>
+                  <p class="mt-1 text-sm leading-6 text-zinc-500">En cas de bruit, choc transport ou affichage absent, contacte-nous avant d'ouvrir ou de déplacer des pièces.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid gap-5 lg:grid-cols-3">
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <p class="text-sm font-bold text-cyan-200">Démarrage</p>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Écran noir, pas d'affichage, voyant, ventilateurs, Windows ou BIOS.</p>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <p class="text-sm font-bold text-cyan-200">Performance</p>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">FPS anormalement bas, chauffe, bruit, crash en jeu ou pilotes graphiques.</p>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-950/70 p-5">
+          <p class="text-sm font-bold text-cyan-200">SAV</p>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">Diagnostic, facture, garantie pièce, retour atelier ou aide à distance.</p>
+        </div>
+      </section>
+
+      <section id="faq" class="py-10">
+        <div class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">FAQ</p>
+          <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-white">Questions fréquentes</h2>
+        </div>
+
+        <div class="space-y-3">
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              Mon écran reste noir, je fais quoi ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              Vérifie d'abord que le câble écran est branché sur la carte graphique, pas sur la carte mère.
+              Teste aussi une autre entrée HDMI/DisplayPort sur l'écran. Si rien ne s'affiche, envoie-nous une photo de l'arrière du PC.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              Le PC fait du bruit au premier lancement, c'est normal ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              Un pic de ventilation court au démarrage peut être normal. Si le bruit reste fort, mécanique, ou s'il ressemble à un frottement,
+              coupe la machine et contacte-nous avec une courte vidéo.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              Windows ou les pilotes sont-ils déjà installés ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              Oui, nos machines sont préparées, testées et livrées prêtes à démarrer sauf mention contraire.
+              Il peut rester quelques mises à jour Windows ou pilotes selon le moment où tu branches le PC.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              J'ai un souci après transport, que dois-je envoyer ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              Envoie le nom de la config ou le lien de l'annonce, une photo de l'emballage, une photo de l'intérieur si tu peux le faire sans toucher aux pièces,
+              et une vidéo du problème. Ça nous permet de trier vite entre câble débranché, choc transport ou réglage logiciel.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              Est-ce que je peux ouvrir le PC ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              Oui pour une inspection visuelle simple, mais évite de retirer des composants avant qu'on ait échangé.
+              Si tu n'es pas sûr, contacte-nous d'abord : ça évite de transformer un petit câble déplacé en vraie galère.
+            </p>
+          </details>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/75 p-5">
+            <summary class="cursor-pointer list-none font-semibold text-white">
+              Combien de temps prend une réponse ?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-zinc-400">
+              On répond dès que possible. Pour un souci bloquant au démarrage, indique-le clairement dans l'objet du mail pour qu'on le traite en priorité.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section class="mb-8 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-6 text-center">
+        <p class="text-2xl font-extrabold text-white">On reste avec toi après la livraison.</p>
+        <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-cyan-100/70">
+          La Belle Config, ce n'est pas juste un carton envoyé. C'est une machine suivie, testée, et une équipe joignable si tu bloques.
+        </p>
+        <a
+          class="mt-5 inline-flex items-center justify-center rounded-md bg-cyan-300 px-5 py-3 text-sm font-bold text-black transition hover:bg-white"
+          href="mailto:labelleconfig@gmail.com?subject=Support%20La%20Belle%20Config"
+        >
+          Écrire au support
+        </a>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
