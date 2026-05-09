@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurateur Semi-Mesure | La Belle Config</title>
+  <meta name="description" content="Configure ton PC semi-mesure La Belle Config : base optimisée, options modulables, devis vérifié sous 24h.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            display: ["Outfit", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          boxShadow: {
+            glow: "0 0 42px rgba(34, 211, 238, 0.18)",
+            soft: "0 24px 80px rgba(0,0,0,0.45)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-black font-sans text-zinc-100 antialiased selection:bg-cyan-300 selection:text-black">
+  <main class="relative min-h-screen overflow-x-hidden">
+    <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.20),transparent_32rem),radial-gradient(circle_at_85%_10%,rgba(59,130,246,0.12),transparent_24rem),linear-gradient(to_bottom,#020203,#050507_42%,#000)]"></div>
+    <div class="fixed inset-0 -z-10 bg-[linear-gradient(to_right,rgba(39,39,42,0.42)_1px,transparent_1px),linear-gradient(to_bottom,rgba(39,39,42,0.42)_1px,transparent_1px)] bg-[size:46px_46px] opacity-20"></div>
+
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-black/72 backdrop-blur-xl">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+        <a href="/" class="flex items-center gap-3">
+          <img src="logo2-labelleconfig.png" alt="La Belle Config" class="h-10 w-10 rounded-lg border border-cyan-300/25 bg-zinc-950 object-contain p-1">
+          <div>
+            <p class="text-sm font-extrabold tracking-tight text-white">La Belle Config</p>
+            <p class="text-xs text-zinc-500">Configurateur semi-mesure</p>
+          </div>
+        </a>
+        <nav class="hidden items-center gap-2 sm:flex">
+          <a href="/" class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-400 transition hover:text-white">Accueil</a>
+          <a href="/#catalogue" class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-400 transition hover:text-white">Catalogue</a>
+          <a href="/support/" class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-400 transition hover:text-white">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="mx-auto grid max-w-7xl gap-9 px-5 pb-10 pt-10 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:pb-14 lg:pt-16">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[0.36em] text-cyan-300">Semi-mesure</p>
+        <h1 class="mt-5 font-display text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
+          Choisis la base.
+          <span class="block text-cyan-200">On verrouille le reste.</span>
+        </h1>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-zinc-950/70 p-5 shadow-soft sm:p-6">
+        <p class="text-base leading-7 text-zinc-300">
+          Pars d'une config type déjà équilibrée, ajuste les pièces importantes, puis nos experts vérifient les prix réels et la compatibilité avant de t'envoyer un devis validé sous 24h.
+        </p>
+        <div class="mt-5 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4">
+            <p class="text-sm font-bold text-cyan-100">Base optimisée</p>
+            <p class="mt-1 text-xs leading-5 text-cyan-100/65">Pas de bottleneck inutile.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <p class="text-sm font-bold text-white">Options claires</p>
+            <p class="mt-1 text-xs leading-5 text-zinc-500">Surcoûts affichés en direct.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <p class="text-sm font-bold text-white">Devis humain</p>
+            <p class="mt-1 text-xs leading-5 text-zinc-500">Validation avant paiement.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="base-step" class="mx-auto max-w-7xl px-5 pb-14 sm:px-8">
+      <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">Étape 1</p>
+          <h2 class="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">Choisis ta base</h2>
+        </div>
+        <p id="sync-state" class="text-sm text-zinc-500">Synchronisation Supabase...</p>
+      </div>
+      <div id="templates-grid" class="grid gap-5 lg:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-zinc-950/70 p-6">
+          <div class="h-52 animate-pulse rounded-xl bg-zinc-900"></div>
+          <div class="mt-5 h-6 w-2/3 animate-pulse rounded bg-zinc-900"></div>
+          <div class="mt-3 h-4 w-full animate-pulse rounded bg-zinc-900"></div>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-zinc-950/70 p-6">
+          <div class="h-52 animate-pulse rounded-xl bg-zinc-900"></div>
+          <div class="mt-5 h-6 w-2/3 animate-pulse rounded bg-zinc-900"></div>
+          <div class="mt-3 h-4 w-full animate-pulse rounded bg-zinc-900"></div>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-zinc-950/70 p-6">
+          <div class="h-52 animate-pulse rounded-xl bg-zinc-900"></div>
+          <div class="mt-5 h-6 w-2/3 animate-pulse rounded bg-zinc-900"></div>
+          <div class="mt-3 h-4 w-full animate-pulse rounded bg-zinc-900"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="config-step" class="mx-auto hidden max-w-7xl px-5 pb-36 sm:px-8 lg:pb-20">
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <button id="back-to-bases" class="mb-4 inline-flex items-center gap-2 rounded-md border border-white/10 px-3 py-2 text-sm font-semibold text-zinc-300 transition hover:border-cyan-300/40 hover:text-cyan-100">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+            Changer de base
+          </button>
+          <p class="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">Étape 2</p>
+          <h2 id="config-title" class="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">Configure ta machine</h2>
+          <p id="config-description" class="mt-2 max-w-2xl text-sm leading-6 text-zinc-500"></p>
+        </div>
+        <div class="rounded-xl border border-cyan-300/20 bg-cyan-300/[0.06] px-4 py-3 text-sm text-cyan-100/80">
+          Le prix affiché reste une estimation. On confirme la disponibilité et le tarif final avant paiement.
+        </div>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+        <div id="categories-list" class="space-y-5"></div>
+
+        <aside class="hidden lg:sticky lg:top-24 lg:block">
+          <div class="rounded-3xl border border-white/10 bg-zinc-950/86 p-5 shadow-soft backdrop-blur-xl">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">Récap</p>
+                <h3 id="recap-name" class="mt-2 text-xl font-extrabold text-white"></h3>
+              </div>
+              <span class="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-100">Live</span>
+            </div>
+            <div id="recap-options" class="mt-5 space-y-2 text-sm text-zinc-400"></div>
+            <div class="mt-6 rounded-2xl border border-white/10 bg-black/50 p-4">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">Prix estimé</p>
+              <p id="recap-price" class="mt-1 font-display text-4xl font-black text-white"></p>
+            </div>
+            <button id="open-quote-modal" class="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-cyan-300 px-5 py-4 text-sm font-black text-black shadow-glow transition hover:bg-white">
+              Demander mon devis validé
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div id="mobile-recap" class="fixed inset-x-0 bottom-0 z-40 hidden border-t border-white/10 bg-black/88 p-4 backdrop-blur-xl lg:hidden">
+      <div class="mx-auto flex max-w-3xl items-center justify-between gap-3">
+        <div class="min-w-0">
+          <p id="mobile-recap-name" class="truncate text-sm font-bold text-white"></p>
+          <p id="mobile-recap-price" class="font-display text-2xl font-black text-cyan-100"></p>
+        </div>
+        <button id="mobile-open-quote-modal" class="shrink-0 rounded-xl bg-cyan-300 px-4 py-3 text-sm font-black text-black">
+          Devis
+        </button>
+      </div>
+    </div>
+
+    <div id="quote-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/76 backdrop-blur-sm" data-close-modal></div>
+      <div class="relative w-full max-w-xl rounded-3xl border border-white/10 bg-zinc-950 p-5 shadow-soft sm:p-6">
+        <button class="absolute right-4 top-4 rounded-full border border-white/10 p-2 text-zinc-400 transition hover:text-white" data-close-modal aria-label="Fermer">
+          <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+        <p class="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">Étape 3</p>
+        <h2 class="mt-2 font-display text-3xl font-extrabold text-white">Recevoir le devis validé</h2>
+        <p class="mt-3 text-sm leading-6 text-zinc-400">
+          Nos experts vont analyser votre configuration, vérifier les prix en direct et vous envoyer un devis validé sous 24h avec un lien de paiement sécurisé.
+        </p>
+
+        <div class="mt-5 rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.06] p-4">
+          <div class="flex items-center justify-between gap-3">
+            <p id="modal-config-name" class="text-sm font-bold text-cyan-100"></p>
+            <p id="modal-config-price" class="font-display text-2xl font-black text-white"></p>
+          </div>
+        </div>
+
+        <form id="quote-form" class="mt-5 space-y-4">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block">
+              <span class="text-sm font-bold text-zinc-200">Prénom</span>
+              <input id="first-name" required class="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none transition placeholder:text-zinc-700 focus:border-cyan-300" placeholder="Alex">
+            </label>
+            <label class="block">
+              <span class="text-sm font-bold text-zinc-200">Nom</span>
+              <input id="last-name" required class="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none transition placeholder:text-zinc-700 focus:border-cyan-300" placeholder="Martin">
+            </label>
+          </div>
+          <label class="block">
+            <span class="text-sm font-bold text-zinc-200">Email</span>
+            <input id="email" type="email" required class="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none transition placeholder:text-zinc-700 focus:border-cyan-300" placeholder="alex@email.fr">
+          </label>
+          <div id="submit-feedback" class="hidden rounded-xl border px-4 py-3 text-sm"></div>
+          <button id="submit-quote" class="inline-flex w-full items-center justify-center rounded-xl bg-cyan-300 px-5 py-4 text-sm font-black text-black shadow-glow transition hover:bg-white">
+            Envoyer ma demande
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
+    const DEFAULT_WEBHOOK_URL = "https://hook.eu1.make.com/6lbt0oiir44rvuz64gb8pcpew1q4p1y1";
+    const WEBHOOK_URL = window.LBC_CONFIGURATOR_WEBHOOK_URL || window.NEXT_PUBLIC_WEBHOOK_URL || DEFAULT_WEBHOOK_URL;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const categoryLabels = {
+      cpu: "Processeur",
+      gpu: "Carte graphique",
+      motherboard: "Carte mère",
+      ram: "Mémoire",
+      storage: "Stockage",
+      case: "Boîtier",
+      cooling: "Refroidissement",
+      psu: "Alimentation",
+      wifi: "Wi-Fi / Réseau",
+      bluetooth: "Bluetooth",
+      os: "Système",
+      other: "Autre",
+    };
+    const categoryRank = ["cpu", "gpu", "motherboard", "ram", "storage", "case", "cooling", "psu", "wifi", "bluetooth", "os", "other"];
+
+    let templates = [];
+    let baseComponents = [];
+    let options = [];
+    let selectedTemplate = null;
+    let selectedOptionsByCategory = {};
+
+    const formatEUR = (value) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(Number(value || 0));
+    const normalizeCategory = (category) => String(category || "other").toLowerCase().trim();
+    const labelFor = (category) => categoryLabels[normalizeCategory(category)] || category;
+    const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    }[char]));
+
+    const templatesGrid = document.getElementById("templates-grid");
+    const syncState = document.getElementById("sync-state");
+    const baseStep = document.getElementById("base-step");
+    const configStep = document.getElementById("config-step");
+    const categoriesList = document.getElementById("categories-list");
+    const mobileRecap = document.getElementById("mobile-recap");
+    const quoteModal = document.getElementById("quote-modal");
+    const quoteForm = document.getElementById("quote-form");
+    const submitFeedback = document.getElementById("submit-feedback");
+
+    function buildImage(template) {
+      if (template.image_url) {
+        return `<img class="h-full w-full object-cover transition duration-700 group-hover:scale-105" src="${escapeHTML(template.image_url)}" alt="${escapeHTML(template.name)}">`;
+      }
+
+      return `
+        <div class="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_50%_32%,rgba(34,211,238,0.24),transparent_14rem),linear-gradient(145deg,#111113,#030304)]">
+          <div class="absolute left-1/2 top-1/2 h-28 w-36 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-cyan-300/30 bg-black/60 shadow-glow"></div>
+          <div class="absolute left-1/2 top-1/2 h-20 w-24 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/15 bg-zinc-950"></div>
+          <div class="absolute left-1/2 top-[calc(50%+4.5rem)] h-2 w-48 -translate-x-1/2 rounded-full bg-cyan-300/30 blur"></div>
+        </div>
+      `;
+    }
+
+    async function loadData() {
+      try {
+        const { data: templateRows, error: templateError } = await supabase
+          .from("config_templates")
+          .select("id,name,description,image_url,base_buy_price,base_sell_price,estimated_shipping_fee")
+          .order("base_sell_price", { ascending: true });
+
+        if (templateError) throw templateError;
+        templates = templateRows || [];
+
+        if (!templates.length) {
+          syncState.textContent = "Aucune base active pour le moment.";
+          templatesGrid.innerHTML = `
+            <div class="col-span-full rounded-2xl border border-white/10 bg-zinc-950/70 p-8 text-center">
+              <p class="text-lg font-bold text-white">Les bases semi-mesure arrivent bientôt.</p>
+              <p class="mt-2 text-sm text-zinc-500">Reviens un peu plus tard ou passe par le formulaire sur-mesure classique.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const templateIds = templates.map((template) => template.id);
+        const [{ data: baseRows, error: baseError }, { data: optionRows, error: optionError }] = await Promise.all([
+          supabase.from("config_base_components").select("*").in("template_id", templateIds).order("sort_order", { ascending: true }),
+          supabase.from("config_options").select("*").in("template_id", templateIds).order("sort_order", { ascending: true }),
+        ]);
+
+        if (baseError) throw baseError;
+        if (optionError) throw optionError;
+
+        baseComponents = baseRows || [];
+        options = optionRows || [];
+        syncState.textContent = "Données synchronisées en direct.";
+        renderTemplates();
+      } catch (error) {
+        console.error("Erreur chargement configurateur:", error);
+        syncState.textContent = "Connexion impossible.";
+        templatesGrid.innerHTML = `
+          <div class="col-span-full rounded-2xl border border-red-500/25 bg-red-500/10 p-6">
+            <p class="font-bold text-red-100">Impossible de charger les bases configurateur.</p>
+            <p class="mt-2 text-sm leading-6 text-red-100/70">Vérifie que les droits de lecture publics Supabase sont bien appliqués sur les tables configurateur.</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderTemplates() {
+      templatesGrid.innerHTML = templates.map((template) => `
+        <article class="group overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/76 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-cyan-300/35">
+          <div class="h-64 overflow-hidden border-b border-white/10">
+            ${buildImage(template)}
+          </div>
+          <div class="p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+              <h3 class="font-display text-2xl font-extrabold text-white">${escapeHTML(template.name)}</h3>
+              <span class="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-100">Base</span>
+            </div>
+            <p class="mt-3 min-h-[3rem] text-sm leading-6 text-zinc-500">${escapeHTML(template.description || "Configuration équilibrée et prête à personnaliser.")}</p>
+            <button data-template-id="${template.id}" class="configure-template mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-300 px-5 py-4 text-sm font-black text-black shadow-glow transition hover:bg-white">
+              Configurer à partir de ${formatEUR(template.base_sell_price)}
+            </button>
+          </div>
+        </article>
+      `).join("");
+
+      document.querySelectorAll(".configure-template").forEach((button) => {
+        button.addEventListener("click", () => selectTemplate(button.dataset.templateId));
+      });
+    }
+
+    function selectTemplate(templateId) {
+      selectedTemplate = templates.find((template) => template.id === templateId);
+      selectedOptionsByCategory = {};
+      document.getElementById("config-title").textContent = selectedTemplate.name;
+      document.getElementById("config-description").textContent = selectedTemplate.description || "";
+      baseStep.classList.add("hidden");
+      configStep.classList.remove("hidden");
+      mobileRecap.classList.remove("hidden");
+      renderConfigurator();
+      updateRecap();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function getTemplateBaseComponents() {
+      return baseComponents.filter((component) => component.template_id === selectedTemplate?.id);
+    }
+
+    function getTemplateOptions() {
+      return options.filter((option) => option.template_id === selectedTemplate?.id);
+    }
+
+    function getCategories() {
+      const categories = new Set();
+      getTemplateBaseComponents().forEach((component) => categories.add(normalizeCategory(component.category)));
+      getTemplateOptions().forEach((option) => categories.add(normalizeCategory(option.category)));
+      return [...categories].sort((a, b) => {
+        const rankA = categoryRank.includes(a) ? categoryRank.indexOf(a) : 999;
+        const rankB = categoryRank.includes(b) ? categoryRank.indexOf(b) : 999;
+        return rankA - rankB || a.localeCompare(b);
+      });
+    }
+
+    function renderConfigurator() {
+      categoriesList.innerHTML = getCategories().map((category) => {
+        const bases = getTemplateBaseComponents().filter((component) => normalizeCategory(component.category) === category);
+        const categoryOptions = getTemplateOptions().filter((option) => normalizeCategory(option.category) === category);
+        const selectedId = selectedOptionsByCategory[category] || "";
+
+        return `
+          <section class="rounded-3xl border border-white/10 bg-zinc-950/74 p-5 shadow-soft sm:p-6">
+            <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[0.24em] text-cyan-300">${escapeHTML(labelFor(category))}</p>
+                <h3 class="mt-2 text-xl font-extrabold text-white">${bases.length ? bases.map((base) => escapeHTML(base.name)).join(" + ") : "Choix libre"}</h3>
+              </div>
+              <span class="w-fit rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs font-bold text-emerald-100">Inclus</span>
+            </div>
+
+            <div class="grid gap-3 md:grid-cols-2">
+              <button data-category="${category}" data-option-id="" class="option-tile ${!selectedId ? "border-cyan-300/55 bg-cyan-300/[0.08]" : "border-white/10 bg-black/35"} rounded-2xl border p-4 text-left transition hover:border-cyan-300/40">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="font-bold text-white">Configuration de base</p>
+                    <p class="mt-1 text-sm leading-5 text-zinc-500">${bases.length ? bases.map((base) => escapeHTML(base.name)).join(", ") : "Aucun composant de base défini"}</p>
+                  </div>
+                  <span class="shrink-0 text-sm font-black text-cyan-100">+ 0 €</span>
+                </div>
+              </button>
+              ${categoryOptions.map((option) => {
+                const delta = Number(option.sell_price_variation || 0);
+                const sign = delta >= 0 ? "+" : "-";
+                return `
+                  <button data-category="${category}" data-option-id="${option.id}" class="option-tile ${selectedId === option.id ? "border-cyan-300/55 bg-cyan-300/[0.08]" : "border-white/10 bg-black/35"} rounded-2xl border p-4 text-left transition hover:border-cyan-300/40">
+                    <div class="flex items-start justify-between gap-3">
+                      <div>
+                        <p class="font-bold text-white">${escapeHTML(option.name)}</p>
+                        <p class="mt-1 text-sm leading-5 text-zinc-500">Variation par rapport à la base.</p>
+                      </div>
+                      <span class="shrink-0 text-sm font-black ${delta >= 0 ? "text-cyan-100" : "text-emerald-200"}">${sign} ${formatEUR(Math.abs(delta))}</span>
+                    </div>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".option-tile").forEach((button) => {
+        button.addEventListener("click", () => {
+          const category = button.dataset.category;
+          const optionId = button.dataset.optionId;
+          if (optionId) {
+            selectedOptionsByCategory[category] = optionId;
+          } else {
+            delete selectedOptionsByCategory[category];
+          }
+          renderConfigurator();
+          updateRecap();
+        });
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function getSelectedOptions() {
+      const selectedIds = Object.values(selectedOptionsByCategory).filter(Boolean);
+      return getTemplateOptions().filter((option) => selectedIds.includes(option.id));
+    }
+
+    function getEstimatedPrice() {
+      return Number(selectedTemplate?.base_sell_price || 0) + getSelectedOptions().reduce((sum, option) => sum + Number(option.sell_price_variation || 0), 0);
+    }
+
+    function updateRecap() {
+      const selectedOptions = getSelectedOptions();
+      const price = getEstimatedPrice();
+      const optionHTML = selectedOptions.length
+        ? selectedOptions.map((option) => `
+          <div class="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+            <span>${escapeHTML(labelFor(option.category))} : ${escapeHTML(option.name)}</span>
+            <strong class="text-cyan-100">${Number(option.sell_price_variation || 0) >= 0 ? "+" : "-"} ${formatEUR(Math.abs(Number(option.sell_price_variation || 0)))}</strong>
+          </div>
+        `).join("")
+        : `<p class="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-zinc-500">Aucune option ajoutée. Base optimisée uniquement.</p>`;
+
+      document.getElementById("recap-name").textContent = selectedTemplate.name;
+      document.getElementById("recap-options").innerHTML = optionHTML;
+      document.getElementById("recap-price").textContent = formatEUR(price);
+      document.getElementById("mobile-recap-name").textContent = selectedTemplate.name;
+      document.getElementById("mobile-recap-price").textContent = formatEUR(price);
+      document.getElementById("modal-config-name").textContent = selectedTemplate.name;
+      document.getElementById("modal-config-price").textContent = formatEUR(price);
+    }
+
+    function openQuoteModal() {
+      submitFeedback.classList.add("hidden");
+      quoteModal.classList.remove("hidden");
+      quoteModal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeQuoteModal() {
+      quoteModal.classList.add("hidden");
+      quoteModal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("back-to-bases").addEventListener("click", () => {
+      selectedTemplate = null;
+      configStep.classList.add("hidden");
+      mobileRecap.classList.add("hidden");
+      baseStep.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("open-quote-modal").addEventListener("click", openQuoteModal);
+    document.getElementById("mobile-open-quote-modal").addEventListener("click", openQuoteModal);
+    document.querySelectorAll("[data-close-modal]").forEach((element) => element.addEventListener("click", closeQuoteModal));
+
+    quoteForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const submitButton = document.getElementById("submit-quote");
+      submitButton.disabled = true;
+      submitButton.textContent = "Envoi en cours...";
+      submitFeedback.classList.add("hidden");
+
+      const firstName = document.getElementById("first-name").value.trim();
+      const lastName = document.getElementById("last-name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const selectedOptions = getSelectedOptions();
+
+      const payload = {
+        source: "configurateur_semi_mesure",
+        client_name: `${firstName} ${lastName}`.trim(),
+        client_first_name: firstName,
+        client_last_name: lastName,
+        client_email: email,
+        template_id: selectedTemplate.id,
+        template_name: selectedTemplate.name,
+        estimated_price: getEstimatedPrice(),
+        selected_options: selectedOptions.map((option) => ({
+          id: option.id,
+          category: normalizeCategory(option.category),
+          name: option.name,
+          buy_price_variation: Number(option.buy_price_variation || 0),
+          sell_price_variation: Number(option.sell_price_variation || 0),
+        })),
+        base_components: getTemplateBaseComponents().map((component) => ({
+          id: component.id,
+          category: normalizeCategory(component.category),
+          name: component.name,
+        })),
+      };
+
+      try {
+        await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          mode: "no-cors",
+        });
+
+        submitFeedback.textContent = "Demande envoyée. On vérifie la config et on revient vers toi sous 24h.";
+        submitFeedback.className = "rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100";
+        submitFeedback.classList.remove("hidden");
+        quoteForm.reset();
+      } catch (error) {
+        console.error("Erreur envoi configurateur:", error);
+        submitFeedback.textContent = "L'envoi n'a pas fonctionné. Réessaie dans un instant ou passe par le formulaire classique.";
+        submitFeedback.className = "rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-100";
+        submitFeedback.classList.remove("hidden");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Envoyer ma demande";
+      }
+    });
+
+    loadData();
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>
