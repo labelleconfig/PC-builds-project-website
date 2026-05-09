@@ -86,6 +86,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let pcData = [];
 
+    const formatEUR = (value) => new Intl.NumberFormat('fr-FR', {
+        style: 'currency',
+        currency: 'EUR',
+        maximumFractionDigits: 0
+    }).format(Number(value || 0));
+
+    const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[char]));
+
     /**
      * Mapper : Convertit les données relationnelles de Supabase vers l'interface attendue par la vue (UI).
      */
@@ -153,6 +167,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Problème de permissions détecté : Assurez-vous d\'avoir exécuté "GRANT SELECT ON public.builds TO anon;" dans Supabase.');
             }
             grid.innerHTML = '<div class="loader-container"><p class="text-secondary">Impossible de charger le catalogue. Réessayez plus tard.</p></div>';
+        }
+    }
+
+    async function loadSemiMeasureTemplates() {
+        const grid = document.getElementById('semi-measure-grid');
+        if (!grid) return;
+
+        try {
+            const { data, error } = await supabase
+                .from('config_templates')
+                .select('id,name,description,image_url,base_sell_price')
+                .order('base_sell_price', { ascending: true })
+                .limit(3);
+
+            if (error) throw error;
+
+            const templates = data || [];
+            if (!templates.length) {
+                grid.innerHTML = `
+                    <div class="semi-loader glass">
+                        <p>Aucune base semi-mesure disponible pour le moment.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = templates.map((template, index) => {
+                const image = template.image_url
+                    ? `<img src="${escapeHTML(template.image_url)}" alt="${escapeHTML(template.name)}" class="semi-card-img" loading="lazy">`
+                    : '<div class="semi-card-placeholder"></div>';
+
+                return `
+                    <a class="semi-card fade-in-up visible" href="configurateur.html?base=${encodeURIComponent(template.id)}" style="animation-delay:${index * 100}ms">
+                        <div class="semi-card-inner">
+                            <div class="semi-card-media">${image}</div>
+                            <div class="semi-card-content">
+                                <h3 class="semi-card-title">${escapeHTML(template.name)}</h3>
+                                <p class="semi-card-description">${escapeHTML(template.description || 'Une base équilibrée, prête à personnaliser selon ton usage.')}</p>
+                                <span class="btn btn-cyan semi-card-cta">Personnaliser à partir de ${formatEUR(template.base_sell_price)}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        } catch (error) {
+            console.error('Erreur chargement semi-mesure:', error);
+            grid.innerHTML = `
+                <div class="semi-loader glass">
+                    <p>Impossible de charger les bases semi-mesure. Réessayez plus tard.</p>
+                </div>
+            `;
         }
     }
 
@@ -373,4 +438,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Init
     loadCatalogue();
+    loadSemiMeasureTemplates();
 });

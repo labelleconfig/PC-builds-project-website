@@ -111,7 +111,7 @@
         <div>
           <button id="back-to-bases" class="mb-4 inline-flex items-center gap-2 rounded-md border border-white/10 px-3 py-2 text-sm font-semibold text-zinc-300 transition hover:border-cyan-300/40 hover:text-cyan-100">
             <i data-lucide="arrow-left" class="h-4 w-4"></i>
-            Changer de base
+            Retour aux modèles
           </button>
           <p class="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">Étape 2</p>
           <h2 id="config-title" class="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">Configure ta machine</h2>
@@ -232,6 +232,7 @@
     let options = [];
     let selectedTemplate = null;
     let selectedOptionsByCategory = {};
+    const initialTemplateId = new URLSearchParams(window.location.search).get("base");
 
     const formatEUR = (value) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(Number(value || 0));
     const normalizeCategory = (category) => String(category || "other").toLowerCase().trim();
@@ -302,6 +303,9 @@
         options = optionRows || [];
         syncState.textContent = "Données synchronisées en direct.";
         renderTemplates();
+        if (initialTemplateId) {
+          selectTemplate(initialTemplateId, { updateUrl: false });
+        }
       } catch (error) {
         console.error("Erreur chargement configurateur:", error);
         syncState.textContent = "Connexion impossible.";
@@ -338,8 +342,12 @@
       });
     }
 
-    function selectTemplate(templateId) {
+    function selectTemplate(templateId, behavior = {}) {
       selectedTemplate = templates.find((template) => template.id === templateId);
+      if (!selectedTemplate) {
+        syncState.textContent = "Base introuvable. Choisis un modèle dans la liste.";
+        return;
+      }
       selectedOptionsByCategory = {};
       document.getElementById("config-title").textContent = selectedTemplate.name;
       document.getElementById("config-description").textContent = selectedTemplate.description || "";
@@ -348,6 +356,11 @@
       mobileRecap.classList.remove("hidden");
       renderConfigurator();
       updateRecap();
+      if (behavior.updateUrl !== false) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("base", selectedTemplate.id);
+        window.history.replaceState({}, "", url);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -482,6 +495,9 @@
       configStep.classList.add("hidden");
       mobileRecap.classList.add("hidden");
       baseStep.classList.remove("hidden");
+      const url = new URL(window.location.href);
+      url.searchParams.delete("base");
+      window.history.replaceState({}, "", url.pathname + url.search + url.hash);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
