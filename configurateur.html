@@ -207,8 +207,7 @@
 
     const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
-    const DEFAULT_WEBHOOK_URL = "https://hook.eu1.make.com/6lbt0oiir44rvuz64gb8pcpew1q4p1y1";
-    const WEBHOOK_URL = window.LBC_CONFIGURATOR_WEBHOOK_URL || window.NEXT_PUBLIC_WEBHOOK_URL || DEFAULT_WEBHOOK_URL;
+    const CONFIGURATOR_API_URL = "https://erp-lbc.vercel.app/api/webhooks/configurator-demand";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const categoryLabels = {
@@ -524,6 +523,7 @@
         client_last_name: lastName,
         client_email: email,
         template_id: selectedTemplate.id,
+        selected_template_id: selectedTemplate.id,
         template_name: selectedTemplate.name,
         estimated_price: getEstimatedPrice(),
         selected_options: selectedOptions.map((option) => ({
@@ -541,12 +541,16 @@
       };
 
       try {
-        await fetch(WEBHOOK_URL, {
+        const response = await fetch(CONFIGURATOR_API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-          mode: "no-cors",
         });
+
+        if (!response.ok) {
+          const errorPayload = await response.json().catch(() => ({}));
+          throw new Error(errorPayload.error || "Demande refusée par l'ERP.");
+        }
 
         submitFeedback.textContent = "Demande envoyée. On vérifie la config et on revient vers toi sous 24h.";
         submitFeedback.className = "rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100";
