@@ -178,7 +178,7 @@
           </div>
         </div>
 
-        <form id="quote-form" class="mt-5 space-y-4">
+        <form id="configurator-form" class="mt-5 space-y-4">
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="block">
               <span class="text-sm font-bold text-zinc-200">Prénom</span>
@@ -251,7 +251,7 @@
     const categoriesList = document.getElementById("categories-list");
     const mobileRecap = document.getElementById("mobile-recap");
     const quoteModal = document.getElementById("quote-modal");
-    const quoteForm = document.getElementById("quote-form");
+    const quoteForm = document.getElementById("configurator-form");
     const submitFeedback = document.getElementById("submit-feedback");
 
     function buildImage(template) {
@@ -541,6 +541,7 @@
       };
 
       try {
+        console.log("Envoi des données vers ERP:", payload);
         const response = await fetch(CONFIGURATOR_API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
