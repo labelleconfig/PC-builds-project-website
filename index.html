@@ -26,8 +26,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <!-- Premium Dark Background -->
+<body data-theme="light">
+    <!-- Premium Background -->
     <div class="site-bg">
         <div class="grid-overlay"></div>
         <div class="glow glow-1"></div>
@@ -43,12 +43,18 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#adn">Philosophie</a></li>
+                <li><a href="#semi-mesure">Semi-mesure</a></li>
                 <li><a href="#catalogue">Catalogue</a></li>
-                <li><a href="configurateur.html">Semi-mesure</a></li>
                 <li><a href="#sur-demande" class="btn btn-sm btn-cyan">Sur Demande</a></li>
             </ul>
-            <div class="menu-toggle">
-                <i data-lucide="menu"></i>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Changer de thème">
+                    <i data-lucide="sun" class="theme-icon theme-icon-sun"></i>
+                    <i data-lucide="moon" class="theme-icon theme-icon-moon"></i>
+                </button>
+                <div class="menu-toggle">
+                    <i data-lucide="menu"></i>
+                </div>
             </div>
         </div>
     </nav>
@@ -59,30 +65,30 @@
             <!-- Left Side: Gaming -->
             <div class="hero-pane pane-gaming">
                 <div class="pane-content fade-in-up">
-                    <span class="pane-badge">/// PURE GAMING</span>
+                    <span class="pane-badge">PC GAMING ASSEMBLÉ</span>
                     <h1 class="hero-title">
-                        Le PC Gamer à l'état pur.<br>
-                        <span class="text-cyan">100% perfs.</span>
+                        Le PC pensé pour durer.<br>
+                        <span class="text-cyan">Rapide, propre, fiable.</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Zéro blabla marketing. Des configurations équilibrées au
-                        millimètre pour exploser votre framerate sans faire exploser votre budget.
+                        Des configurations équilibrées, assemblées avec soin et vérifiées avant livraison.
+                        Vous choisissez l'usage, on sécurise le reste.
                     </p>
-                    <a href="#catalogue" class="btn btn-cyan btn-lg">Voir les configs Gaming</a>
+                    <a href="#semi-mesure" class="btn btn-cyan btn-lg">Configurer mon PC</a>
                 </div>
             </div>
 
             <!-- Right Side: Creation / Pro -->
             <div class="hero-pane pane-pro">
                 <div class="pane-content fade-in-up" data-delay="150">
-                    <span class="pane-badge badge-pro">/// STATION DE TRAVAIL</span>
+                    <span class="pane-badge badge-pro">STATION DE TRAVAIL</span>
                     <h1 class="hero-title">
-                        L'outil de travail.<br>
-                        <span class="text-white">Puissance & Silence.</span>
+                        La puissance utile.<br>
+                        <span class="text-white">Sobre et silencieuse.</span>
                     </h1>
                     <p class="hero-subtitle">
-                        Alliez vitesse d'exécution et confort d'utilisation. Des PC conçus pour absorber vos charges de
-                        travail les plus lourdes, jour après jour, sans le moindre accroc.
+                        Un PC adapté à vos logiciels, votre rythme et votre budget. Sans surpromesse,
+                        avec un vrai suivi humain.
                     </p>
                     <a href="configurateur.html" class="btn btn-outline btn-lg">Configurer une Workstation</a>
                 </div>
@@ -119,38 +125,18 @@
         </div>
     </div>
 
-    <!-- ADN / Philosophie -->
-    <section id="adn" class="section">
+    <!-- Semi-mesure -->
+    <section id="semi-mesure" class="section semi-measure-section">
         <div class="container">
             <div class="section-header fade-in-up">
-                <h2 class="section-title">L'ingénierie avant tout.</h2>
-                <p class="section-subtitle">Chaque composant est sélectionné sur ses capacités thermiques, acoustiques
-                    et de performance. Pas de fioritures RGB inutiles.</p>
+                <span class="section-kicker">Bases configurables</span>
+                <h2 class="section-title">Le Semi-Mesure. L'équilibre parfait.</h2>
+                <p class="section-subtitle">Partez d'une base optimisée par nos experts. Ajustez les composants clés selon vos besoins et votre budget. On s'occupe du reste.</p>
             </div>
-            <div class="adn-grid">
-                <div class="adn-card glass fade-in-up" data-delay="100">
-                    <div class="icon-box">
-                        <i data-lucide="thermometer"></i>
-                    </div>
-                    <h3>Thermiques maîtrisées</h3>
-                    <p>Airflow optimisé, pâte thermique premium et courbes de ventilation profilées sur-mesure pour un
-                        ratio bruit/température chirurgical.</p>
-                </div>
-                <div class="adn-card glass fade-in-up" data-delay="200">
-                    <div class="icon-box">
-                        <i data-lucide="cpu"></i>
-                    </div>
-                    <h3>Zéro Bottleneck</h3>
-                    <p>Équilibre parfait entre le CPU et le GPU. Votre machine donne son plein potentiel sans jamais
-                        être bridée par un composant faible.</p>
-                </div>
-                <div class="adn-card glass fade-in-up" data-delay="300">
-                    <div class="icon-box">
-                        <i data-lucide="activity"></i>
-                    </div>
-                    <h3>Tests en Laboratoire</h3>
-                    <p>Chaque configuration subit des stress-tests extrêmes (Cinebench, FurMark, OCCT) pour garantir une
-                        stabilité à toute épreuve.</p>
+            <div id="semi-measure-grid" class="semi-measure-grid">
+                <div class="semi-loader glass">
+                    <div class="tech-loader"></div>
+                    <p>Chargement des bases semi-mesure...</p>
                 </div>
             </div>
         </div>
@@ -182,18 +168,67 @@
         </div>
     </div>
 
-    <!-- Semi-mesure -->
-    <section id="semi-mesure" class="section semi-measure-section border-top">
+    <!-- Avis clients -->
+    <section id="avis" class="section reviews-section border-top">
         <div class="container">
             <div class="section-header fade-in-up">
-                <span class="section-kicker">Bases configurables</span>
-                <h2 class="section-title">Le Semi-Mesure. L'équilibre parfait.</h2>
-                <p class="section-subtitle">Partez d'une base optimisée par nos experts en laboratoire. Ajustez les composants clés selon vos besoins et votre budget. On s'occupe du reste.</p>
+                <span class="section-kicker">Preuve sociale</span>
+                <h2 class="section-title">Ils nous ont fait confiance.</h2>
+                <p class="section-subtitle">Des machines livrées, testées, puis utilisées au quotidien par des clients qui voulaient surtout être tranquilles.</p>
             </div>
-            <div id="semi-measure-grid" class="semi-measure-grid">
-                <div class="semi-loader glass">
-                    <div class="tech-loader"></div>
-                    <p>Chargement des bases semi-mesure...</p>
+            <div class="reviews-scroll" aria-label="Avis clients">
+                <article class="review-card glass fade-in-up">
+                    <div class="review-photo review-photo-a"></div>
+                    <p class="review-text">"PC reçu nickel, super silencieux et prêt à jouer. Le suivi avant paiement m'a vraiment rassuré."</p>
+                    <div class="review-author">Mathis, Lyon</div>
+                </article>
+                <article class="review-card glass fade-in-up" data-delay="100">
+                    <div class="review-photo review-photo-b"></div>
+                    <p class="review-text">"J'avais peur de me tromper sur les composants. La base semi-mesure m'a évité de partir dans tous les sens."</p>
+                    <div class="review-author">Sarah, Nantes</div>
+                </article>
+                <article class="review-card glass fade-in-up" data-delay="200">
+                    <div class="review-photo review-photo-c"></div>
+                    <p class="review-text">"Montage propre, câble management impeccable, et les températures sont meilleures que prévu."</p>
+                    <div class="review-author">Noah, Montpellier</div>
+                </article>
+                <article class="review-card glass fade-in-up" data-delay="300">
+                    <div class="review-photo review-photo-d"></div>
+                    <p class="review-text">"Très clair du devis à la livraison. On sent que ce n'est pas juste une fiche produit automatisée."</p>
+                    <div class="review-author">Camille, Lille</div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADN / Philosophie -->
+    <section id="adn" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2 class="section-title">L'exigence à chaque étape.</h2>
+                <p class="section-subtitle">Chaque composant est sélectionné pour son équilibre entre performance, silence, fiabilité et disponibilité réelle.</p>
+            </div>
+            <div class="adn-grid">
+                <div class="adn-card glass fade-in-up" data-delay="100">
+                    <div class="icon-box">
+                        <i data-lucide="thermometer"></i>
+                    </div>
+                    <h3>Thermiques maîtrisées</h3>
+                    <p>Airflow soigné, pâte thermique de qualité et courbes de ventilation adaptées pour garder une machine stable et agréable.</p>
+                </div>
+                <div class="adn-card glass fade-in-up" data-delay="200">
+                    <div class="icon-box">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <h3>Performances équilibrées</h3>
+                    <p>Un choix cohérent entre processeur, carte graphique, mémoire et stockage pour éviter les dépenses inutiles.</p>
+                </div>
+                <div class="adn-card glass fade-in-up" data-delay="300">
+                    <div class="icon-box">
+                        <i data-lucide="activity"></i>
+                    </div>
+                    <h3>Tests de stabilité rigoureux</h3>
+                    <p>Chaque configuration est vérifiée avant remise au client pour limiter les mauvaises surprises dès les premières heures.</p>
                 </div>
             </div>
         </div>

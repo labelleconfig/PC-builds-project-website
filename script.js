@@ -2,6 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.querySelector('.navbar');
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
+    const themeToggle = document.getElementById('theme-toggle');
+
+    const savedTheme = localStorage.getItem('lbc-theme') || 'light';
+    document.body.dataset.theme = savedTheme;
+    themeToggle?.addEventListener('click', () => {
+        const nextTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.body.dataset.theme = nextTheme;
+        localStorage.setItem('lbc-theme', nextTheme);
+    });
 
     // 1. Navbar Scroll Effect & Mobile Shrinking Pill
     let lastScrollY = window.scrollY;
