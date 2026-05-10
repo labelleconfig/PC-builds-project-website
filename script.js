@@ -213,9 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="semi-card-inner">
                             <div class="semi-card-media">${image}</div>
                             <div class="semi-card-content">
-                                <div class="semi-card-topline">
-                                    <span>${isFeatured ? 'La plus vendue' : 'Base configurable'}</span>
-                                </div>
+                                ${isFeatured ? '<div class="semi-card-topline"><span>La plus vendue</span></div>' : ''}
                                 <h3 class="semi-card-title">${escapeHTML(template.name)}</h3>
                                 <p class="semi-card-description">${escapeHTML(template.description || 'Une base équilibrée, prête à personnaliser selon ton usage.')}</p>
                                 <span class="btn btn-cyan semi-card-cta">${isFeatured ? 'Choisir la plus vendue' : 'Personnaliser'} à partir de ${formatEUR(template.base_sell_price)}</span>
