@@ -277,8 +277,8 @@ body[data-theme="dark"] .trust-bar { background: rgba(10,10,14,0.6); box-shadow:
 }
 .pc-card:hover { transform: translateY(-4px); border-color: var(--accent-cyan); box-shadow: var(--shadow-soft), 0 0 0 1px rgba(83,182,211,0.12); }
 .pc-card-img-wrapper { position: relative; width: 100%; height: 260px; overflow: hidden; border-bottom: 1px solid var(--border-glass); background: #e2e8f0; }
-.pc-card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 0.9; }
-.pc-card:hover .pc-card-img { transform: scale(1.05); opacity: 1; }
+.pc-card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 1; }
+.pc-card:hover .pc-card-img { transform: scale(1.05); }
 
 .pc-status { 
     position: absolute; top: 1rem; left: 1rem; z-index: 2;
@@ -286,6 +286,8 @@ body[data-theme="dark"] .trust-bar { background: rgba(10,10,14,0.6); box-shadow:
     border: 1px solid var(--border-glass); color: var(--text-primary); 
     border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; 
 }
+.pc-status.disponible { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+.pc-status.vendu { background: #374151; color: #ffffff; border-color: #4b5563; }
 .pc-status.premium { color: var(--accent-cyan); border-color: var(--border-cyan); }
 
 .pc-card-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }

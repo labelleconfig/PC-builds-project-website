@@ -257,7 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'pc-card glass fade-in-up visible';
             card.style.animationDelay = `${index * 100}ms`;
 
-            const statusClass = pc.Statut && pc.Statut.toLowerCase().includes('premium') ? 'premium' : '';
+            const isVendu = pc.Statut && pc.Statut.toLowerCase() === 'vendu';
+            const statusClass = isVendu ? 'vendu' : 'disponible';
             card.innerHTML = `
                 <div class="pc-card-img-wrapper">
                     <img src="${mainImage}" alt="${pc.Nom}" class="pc-card-img" loading="lazy">
