@@ -310,8 +310,9 @@ body[data-theme="dark"] .semi-measure-section {
 }
 .semi-measure-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.08fr) minmax(0, 0.96fr);
+    gap: 1.6rem;
+    align-items: center;
 }
 .semi-loader {
     grid-column: 1 / -1;
@@ -328,7 +329,7 @@ body[data-theme="dark"] .semi-measure-section {
     display: flex;
     min-height: 100%;
     overflow: hidden;
-    border-radius: var(--radius-lg);
+    border-radius: 22px;
     border: 1px solid var(--border-glass);
     background: rgba(255, 255, 255, 0.92);
     text-decoration: none;
@@ -349,6 +350,12 @@ body[data-theme="dark"] .semi-measure-section {
     box-shadow: var(--shadow-soft), 0 0 0 1px rgba(83,182,211,0.10);
 }
 body[data-theme="dark"] .semi-card { background: rgba(10, 10, 14, 0.92); }
+.semi-card-featured {
+    border-color: rgba(83,182,211,0.48);
+    box-shadow: 0 24px 70px rgba(83,182,211,0.18), var(--shadow-soft);
+    transform: translateY(-0.55rem);
+}
+.semi-card-featured:hover { transform: translateY(-0.9rem); }
 .semi-card-inner {
     display: flex;
     width: 100%;
@@ -356,7 +363,7 @@ body[data-theme="dark"] .semi-card { background: rgba(10, 10, 14, 0.92); }
 }
 .semi-card-media {
     position: relative;
-    height: 280px;
+    height: 310px;
     overflow: hidden;
     border-bottom: 1px solid var(--border-glass);
     background: #e2e8f0;
@@ -403,12 +410,29 @@ body[data-theme="dark"] .semi-card { background: rgba(10, 10, 14, 0.92); }
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: 1.5rem;
+    padding: 1.65rem;
+}
+.semi-card-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+}
+.semi-card-topline span {
+    border: 1px solid rgba(83,182,211,0.34);
+    border-radius: 999px;
+    background: rgba(83,182,211,0.10);
+    color: var(--accent-cyan-dark);
+    padding: 0.35rem 0.72rem;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 .semi-card-title {
     margin-bottom: 0.75rem;
     color: var(--text-primary);
-    font-size: 1.55rem;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
 }
 .semi-card-description {
     min-height: 4.75rem;
@@ -667,6 +691,7 @@ body[data-theme="dark"] .input-group select { background: rgba(0,0,0,0.2); }
     .trust-item { min-width: 100%; }
     .trust-separator { display: none; }
     .semi-measure-grid { grid-template-columns: 1fr; }
+    .semi-card-featured { transform: none; }
     .form-wrapper { padding: 2rem 1.5rem; }
     .form-grid { grid-template-columns: 1fr; gap: 1.5rem; }
 }

@@ -203,18 +203,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             grid.innerHTML = templates.map((template, index) => {
+                const isFeatured = index === 1;
                 const image = template.image_url
                     ? `<img src="${escapeHTML(template.image_url)}" alt="${escapeHTML(template.name)}" class="semi-card-img" loading="lazy">`
                     : '<div class="semi-card-placeholder"></div>';
 
                 return `
-                    <a class="semi-card fade-in-up visible" href="configurateur.html?base=${encodeURIComponent(template.id)}" style="animation-delay:${index * 100}ms">
+                    <a class="semi-card ${isFeatured ? 'semi-card-featured' : ''} fade-in-up visible" href="configurateur.html?base=${encodeURIComponent(template.id)}" style="animation-delay:${index * 100}ms">
                         <div class="semi-card-inner">
                             <div class="semi-card-media">${image}</div>
                             <div class="semi-card-content">
+                                <div class="semi-card-topline">
+                                    <span>${isFeatured ? 'La plus vendue' : 'Base configurable'}</span>
+                                </div>
                                 <h3 class="semi-card-title">${escapeHTML(template.name)}</h3>
                                 <p class="semi-card-description">${escapeHTML(template.description || 'Une base équilibrée, prête à personnaliser selon ton usage.')}</p>
-                                <span class="btn btn-cyan semi-card-cta">Personnaliser à partir de ${formatEUR(template.base_sell_price)}</span>
+                                <span class="btn btn-cyan semi-card-cta">${isFeatured ? 'Choisir la plus vendue' : 'Personnaliser'} à partir de ${formatEUR(template.base_sell_price)}</span>
                             </div>
                         </div>
                     </a>
