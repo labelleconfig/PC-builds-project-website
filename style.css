@@ -412,22 +412,22 @@ body[data-theme="dark"] .semi-card { background: rgba(10, 10, 14, 0.92); }
     flex-direction: column;
     padding: 1.65rem;
 }
-.semi-card-topline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.85rem;
-}
-.semi-card-topline span {
-    border: 1px solid rgba(83,182,211,0.34);
-    border-radius: 999px;
-    background: rgba(83,182,211,0.10);
-    color: var(--accent-cyan-dark);
+.semi-card-badge-overlay {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 10;
+    border-radius: 9999px;
+    border: 1px solid rgba(83,182,211,0.32);
+    background: rgba(83,182,211,0.15);
     padding: 0.35rem 0.72rem;
     font-size: 0.72rem;
     font-weight: 900;
-    letter-spacing: 0.08em;
+    color: var(--accent-cyan-dark);
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 .semi-card-title {
     margin-bottom: 0.75rem;

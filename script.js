@@ -179,6 +179,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function formatDescription(desc) {
+        if (!desc) return '';
+        const firstDotIndex = desc.indexOf('.');
+        if (firstDotIndex === -1) return escapeHTML(desc);
+        const firstSentence = desc.substring(0, firstDotIndex + 1);
+        const restOfDescription = desc.substring(firstDotIndex + 1).trim();
+        if (!restOfDescription) return `<strong>${escapeHTML(firstSentence)}</strong>`;
+        return `<strong>${escapeHTML(firstSentence)}</strong><br><br>${escapeHTML(restOfDescription)}`;
+    }
+
     async function loadSemiMeasureTemplates() {
         const grid = document.getElementById('semi-measure-grid');
         if (!grid) return;
@@ -211,12 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `
                     <a class="semi-card ${isFeatured ? 'semi-card-featured' : ''} fade-in-up visible" href="configurateur.html?base=${encodeURIComponent(template.id)}" style="animation-delay:${index * 100}ms">
                         <div class="semi-card-inner">
-                            <div class="semi-card-media">${image}</div>
+                            <div class="semi-card-media">
+                                ${image}
+                                ${isFeatured ? '<span class="semi-card-badge-overlay">Le plus vendu</span>' : ''}
+                            </div>
                             <div class="semi-card-content">
-                                ${isFeatured ? '<div class="semi-card-topline"><span>La plus vendue</span></div>' : ''}
                                 <h3 class="semi-card-title">${escapeHTML(template.name)}</h3>
-                                <p class="semi-card-description">${escapeHTML(template.description || 'Une base équilibrée, prête à personnaliser selon ton usage.')}</p>
-                                <span class="btn btn-cyan semi-card-cta">${isFeatured ? 'Choisir la plus vendue' : 'Personnaliser'} à partir de ${formatEUR(template.base_sell_price)}</span>
+                                <p class="semi-card-description">${formatDescription(template.description || 'Une base équilibrée, prête à personnaliser selon ton usage.')}</p>
+                                <span class="btn btn-cyan semi-card-cta">${isFeatured ? 'Choisir le plus vendu' : 'Personnaliser'} à partir de ${formatEUR(template.base_sell_price)}</span>
                             </div>
                         </div>
                     </a>
