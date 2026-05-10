@@ -160,6 +160,40 @@
       background: var(--accent-soft) !important;
       border-color: var(--accent) !important;
     }
+    .component-icon {
+      display: inline-flex;
+      width: 2.35rem;
+      height: 2.35rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: .85rem;
+      border: 1px solid rgba(83,182,211,.22);
+      background: var(--accent-soft);
+      color: var(--accent-text);
+    }
+    .component-icon svg { width: 1.05rem; height: 1.05rem; }
+    .sticky-config-aside {
+      position: sticky;
+      top: 6rem;
+      display: grid;
+      gap: 1rem;
+    }
+    .config-component-list {
+      display: grid;
+      gap: .55rem;
+      margin-top: .9rem;
+    }
+    .config-component-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .75rem;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: rgba(255,255,255,.56);
+      padding: .72rem .85rem;
+    }
+    body[data-theme="dark"] .config-component-row { background: rgba(255,255,255,.04); }
     .brand-text, .text-cyan-600, .text-cyan-700 { color: var(--accent-text) !important; }
     .hover\:text-cyan-600:hover { color: var(--accent-text) !important; }
     .hover\:border-cyan-400:hover { border-color: var(--accent) !important; }
@@ -178,9 +212,7 @@
     <header class="site-header sticky top-0 z-40 border-b backdrop-blur-xl">
       <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
         <a href="/" class="flex items-center gap-3">
-          <svg class="h-14 w-14 rounded-xl border p-2" style="border-color:rgba(83,182,211,.28);background:#071116" viewBox="0 0 675 675" aria-label="La Belle Config">
-            <use href="assets/logo-lbc.svg#lbc-logo"></use>
-          </svg>
+          <img src="assets/frame-4.svg" alt="La Belle Config" class="h-10 w-10 rounded-lg object-contain sm:h-11 sm:w-11">
           <div>
             <p class="text-sm font-extrabold tracking-tight" style="color:var(--text)">La Belle Config</p>
             <p class="text-xs premium-muted">PC configurables</p>
@@ -204,13 +236,13 @@
       <div>
         <p class="text-xs font-black uppercase tracking-[0.36em] text-cyan-600">Nos PC configurables</p>
         <h1 class="mt-5 font-display text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl" style="color:var(--text)">
-          Choisis la base.
-          <span class="block text-cyan-600">On vérifie le reste.</span>
+          Choisis ton PC.
+          <span class="block text-cyan-600">On s’occupe du montage.</span>
         </h1>
       </div>
       <div class="premium-card rounded-2xl p-5 sm:p-6">
         <p class="text-base leading-7 premium-muted">
-          Partez d'une configuration équilibrée, ajustez les pièces importantes, puis nous vérifions les prix réels et la compatibilité avant de vous envoyer un devis validé sous 24h.
+          Partez d'une <strong style="color:var(--text)">configuration équilibrée</strong>, ajustez les pièces importantes, puis nous vérifions les prix réels et la compatibilité avant de vous envoyer un <strong style="color:var(--text)">devis validé sous 24h</strong>.
         </p>
         <ol class="config-timeline mt-5">
           <li class="timeline-step">
@@ -278,14 +310,14 @@
       <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
         <div id="categories-list" class="space-y-5"></div>
 
-        <aside class="hidden lg:sticky lg:top-24 lg:block">
+        <aside class="hidden lg:block lg:self-start">
+          <div class="sticky-config-aside">
           <div class="premium-card rounded-3xl p-5">
             <div class="flex items-start justify-between gap-4">
               <div>
                 <p class="text-xs font-black uppercase tracking-[0.22em] premium-muted">Récap</p>
                 <h3 id="recap-name" class="mt-2 text-xl font-extrabold" style="color:var(--text)"></h3>
               </div>
-              <span class="rounded-full border px-3 py-1 text-xs font-bold text-cyan-700" style="border-color:rgba(83,182,211,.26);background:var(--accent-soft)">Live</span>
             </div>
             <div id="recap-options" class="mt-5 space-y-2 text-sm premium-muted"></div>
             <div class="mt-6 rounded-2xl border p-4" style="border-color:var(--border);background:var(--surface-muted)">
@@ -297,6 +329,7 @@
             </button>
           </div>
           <div id="upsell-card" class="mt-4 hidden"></div>
+          </div>
         </aside>
       </div>
 
@@ -349,6 +382,7 @@
             <p id="modal-config-price" class="font-display text-2xl font-black" style="color:var(--text)"></p>
           </div>
         </div>
+        <div id="modal-config-components" class="config-component-list"></div>
 
         <form id="configurator-form" class="mt-5 space-y-4">
           <div class="grid gap-4 sm:grid-cols-2">
@@ -404,6 +438,20 @@
       os: "Système",
       other: "Autre",
     };
+    const categoryIcons = {
+      cpu: "cpu",
+      gpu: "monitor",
+      motherboard: "circuit-board",
+      ram: "memory-stick",
+      storage: "hard-drive",
+      case: "box",
+      cooling: "fan",
+      psu: "zap",
+      wifi: "wifi",
+      bluetooth: "bluetooth",
+      os: "monitor-cog",
+      other: "settings",
+    };
     const categoryRank = ["cpu", "gpu", "motherboard", "ram", "storage", "case", "cooling", "psu", "wifi", "bluetooth", "os", "other"];
 
     let templates = [];
@@ -416,6 +464,7 @@
     const formatEUR = (value) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(Number(value || 0));
     const normalizeCategory = (category) => String(category || "other").toLowerCase().trim();
     const labelFor = (category) => categoryLabels[normalizeCategory(category)] || category;
+    const iconFor = (category) => categoryIcons[normalizeCategory(category)] || "settings";
     const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
       "&": "&amp;",
       "<": "&lt;",
@@ -567,38 +616,40 @@
         const bases = getTemplateBaseComponents().filter((component) => normalizeCategory(component.category) === category);
         const categoryOptions = getTemplateOptions().filter((option) => normalizeCategory(option.category) === category);
         const selectedId = selectedOptionsByCategory[category] || "";
+        const baseNames = bases.length ? bases.map((base) => escapeHTML(base.name)).join(", ") : "Composant de base à confirmer";
 
         return `
           <section class="premium-card rounded-3xl p-5 sm:p-6">
-            <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p class="text-xs font-black uppercase tracking-[0.24em] text-cyan-600">${escapeHTML(labelFor(category))}</p>
-                <h3 class="mt-2 text-xl font-extrabold" style="color:var(--text)">${bases.length ? bases.map((base) => escapeHTML(base.name)).join(" + ") : "Choix libre"}</h3>
+            <div class="mb-5 flex items-center gap-3">
+              <span class="component-icon"><i data-lucide="${iconFor(category)}"></i></span>
+              <div class="min-w-0">
+                <p class="text-xs font-black uppercase tracking-[0.22em] text-cyan-600">Composant</p>
+                <h3 class="mt-1 text-xl font-extrabold" style="color:var(--text)">${escapeHTML(labelFor(category))}</h3>
               </div>
-              <span class="w-fit rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700">Inclus</span>
             </div>
 
             <div class="grid gap-3 md:grid-cols-2">
               <button data-category="${category}" data-option-id="" class="option-tile ${!selectedId ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white/70"} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
-                <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center justify-between gap-3">
                   <div>
-                    <p class="font-bold" style="color:var(--text)">Configuration de base</p>
-                    <p class="mt-1 text-sm leading-5 premium-muted">${bases.length ? bases.map((base) => escapeHTML(base.name)).join(", ") : "Aucun composant de base défini"}</p>
+                    <p class="font-bold" style="color:var(--text)">${baseNames}</p>
+                    <p class="mt-1 text-sm leading-5 premium-muted">${!selectedId ? "Sélection actuelle" : "Inclus dans cette base"}</p>
                   </div>
-                  <span class="shrink-0 text-sm font-black text-cyan-700">+ 0 €</span>
+                  <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${!selectedId ? "bg-white text-cyan-700" : "text-cyan-700"}">${!selectedId ? "Choisi" : "Inclus"}</span>
                 </div>
               </button>
               ${categoryOptions.map((option) => {
                 const delta = Number(option.sell_price_variation || 0);
                 const sign = delta >= 0 ? "+" : "-";
+                const isSelected = selectedId === option.id;
                 return `
-                  <button data-category="${category}" data-option-id="${option.id}" class="option-tile ${selectedId === option.id ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white/70"} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
-                    <div class="flex items-start justify-between gap-3">
+                  <button data-category="${category}" data-option-id="${option.id}" class="option-tile ${isSelected ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white/70"} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
+                    <div class="flex items-center justify-between gap-3">
                       <div>
                         <p class="font-bold" style="color:var(--text)">${escapeHTML(option.name)}</p>
-                        <p class="mt-1 text-sm leading-5 premium-muted">Variation par rapport à la base.</p>
+                        <p class="mt-1 text-sm leading-5 premium-muted">${isSelected ? "Sélection actuelle" : "Option supérieure"}</p>
                       </div>
-                      <span class="shrink-0 text-sm font-black ${delta >= 0 ? "text-cyan-700" : "text-emerald-700"}">${sign} ${formatEUR(Math.abs(delta))}</span>
+                      <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${isSelected ? "bg-white text-cyan-700" : delta >= 0 ? "text-cyan-700" : "text-emerald-700"}">${isSelected ? "Choisi" : `${sign} ${formatEUR(Math.abs(delta))}`}</span>
                     </div>
                   </button>
                 `;
@@ -628,6 +679,28 @@
     function getSelectedOptions() {
       const selectedIds = Object.values(selectedOptionsByCategory).filter(Boolean);
       return getTemplateOptions().filter((option) => selectedIds.includes(option.id));
+    }
+
+    function getConfiguredComponents() {
+      return getCategories().map((category) => {
+        const bases = getTemplateBaseComponents().filter((component) => normalizeCategory(component.category) === category);
+        const selectedOptionId = selectedOptionsByCategory[category];
+        const selectedOption = getTemplateOptions().find((option) => option.id === selectedOptionId);
+        const names = selectedOption
+          ? [selectedOption.name]
+          : bases.length
+            ? bases.map((component) => component.name)
+            : ["À confirmer"];
+
+        return {
+          category,
+          label: labelFor(category),
+          icon: iconFor(category),
+          names,
+          isOption: Boolean(selectedOption),
+          delta: selectedOption ? Number(selectedOption.sell_price_variation || 0) : 0,
+        };
+      });
     }
 
     function getEstimatedPrice() {
@@ -668,6 +741,7 @@
     function updateRecap() {
       const selectedOptions = getSelectedOptions();
       const price = getEstimatedPrice();
+      const configuredComponents = getConfiguredComponents();
       const optionHTML = selectedOptions.length
         ? selectedOptions.map((option) => `
           <div class="flex items-start justify-between gap-3 rounded-xl border px-3 py-2" style="border-color:var(--border);background:rgba(255,255,255,.42)">
@@ -684,7 +758,20 @@
       document.getElementById("mobile-recap-price").textContent = formatEUR(price);
       document.getElementById("modal-config-name").textContent = selectedTemplate.name;
       document.getElementById("modal-config-price").textContent = formatEUR(price);
+      document.getElementById("modal-config-components").innerHTML = configuredComponents.map((component) => `
+        <div class="config-component-row">
+          <span class="component-icon"><i data-lucide="${component.icon}"></i></span>
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs font-black uppercase tracking-[0.16em] text-cyan-600">${escapeHTML(component.label)}</p>
+              ${component.isOption ? `<span class="text-xs font-black text-cyan-700">${component.delta >= 0 ? "+" : "-"} ${formatEUR(Math.abs(component.delta))}</span>` : ""}
+            </div>
+            <p class="mt-1 text-sm font-bold" style="color:var(--text)">${component.names.map(escapeHTML).join(" + ")}</p>
+          </div>
+        </div>
+      `).join("");
       renderUpsell();
+      if (window.lucide) lucide.createIcons();
     }
 
     function openQuoteModal() {
