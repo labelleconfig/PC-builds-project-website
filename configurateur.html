@@ -718,13 +718,13 @@
             </div>
 
             <div class="grid gap-3 md:grid-cols-2">
-              <button data-category="${category}" data-option-id="" class="option-tile ${!selectedId ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white/70"} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
+              <button data-category="${category}" data-option-id="" class="option-tile ${!selectedId ? "bg-cyan-50" : ""} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
                 <div class="flex items-center justify-between gap-3">
                   <div>
                     <p class="font-bold" style="color:var(--text)">${baseNames}</p>
                     <p class="mt-1 text-sm leading-5 premium-muted">${!selectedId ? "Sélection actuelle" : "Inclus dans cette base"}</p>
                   </div>
-                  <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${!selectedId ? "bg-white text-cyan-700" : "text-cyan-700"}">${!selectedId ? "Choisi" : "Inclus"}</span>
+                  <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${!selectedId ? "text-cyan-700" : "text-cyan-700"}" ${!selectedId ? 'style="background:var(--surface-solid); border: 1px solid var(--accent);"' : 'style="border: 1px solid transparent;"'}>${!selectedId ? "Choisi" : "Inclus"}</span>
                 </div>
               </button>
               ${categoryOptions.map((option) => {
@@ -732,13 +732,13 @@
                 const sign = delta >= 0 ? "+" : "-";
                 const isSelected = selectedId === option.id;
                 return `
-                  <button data-category="${category}" data-option-id="${option.id}" class="option-tile ${isSelected ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white/70"} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
+                  <button data-category="${category}" data-option-id="${option.id}" class="option-tile ${isSelected ? "bg-cyan-50" : ""} rounded-2xl border p-4 text-left transition hover:border-cyan-400">
                     <div class="flex items-center justify-between gap-3">
                       <div>
                         <p class="font-bold" style="color:var(--text)">${escapeHTML(option.name)}</p>
                         <p class="mt-1 text-sm leading-5 premium-muted">${isSelected ? "Sélection actuelle" : "Option supérieure"}</p>
                       </div>
-                      <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${isSelected ? "bg-white text-cyan-700" : delta >= 0 ? "text-cyan-700" : "text-emerald-700"}">${isSelected ? "Choisi" : `${sign} ${formatEUR(Math.abs(delta))}`}</span>
+                      <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ${isSelected ? "text-cyan-700" : delta >= 0 ? "text-cyan-700" : "text-emerald-700"}" ${isSelected ? 'style="background:var(--surface-solid); border: 1px solid var(--accent);"' : 'style="border: 1px solid transparent;"'}>${isSelected ? "Choisi" : `${sign} ${formatEUR(Math.abs(delta))}`}</span>
                     </div>
                   </button>
                 `;
@@ -838,7 +838,7 @@
             <strong class="text-cyan-700">${Number(option.sell_price_variation || 0) >= 0 ? "+" : "-"} ${formatEUR(Math.abs(Number(option.sell_price_variation || 0)))}</strong>
           </div>
         `).join("")
-        : `<p class="rounded-xl border px-3 py-2 premium-muted" style="border-color:var(--border);background:rgba(255,255,255,.42)">Aucune option ajoutée. Base optimisée uniquement.</p>`;
+        : `<p class="rounded-xl border px-3 py-2 premium-muted" style="border-color:var(--border);background:var(--surface-muted)">Aucune option ajoutée. Base optimisée uniquement.</p>`;
 
       document.getElementById("recap-name").textContent = selectedTemplate.name;
       document.getElementById("recap-options").innerHTML = optionHTML;
