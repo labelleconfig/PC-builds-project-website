@@ -228,7 +228,7 @@
       try {
         const { data, error } = await supabase
           .from("public_quotes_view")
-          .select("client_name, selected_options, shipping_cost, total_price, status, stripe_session_url")
+          .select("client_name, template_name, selected_options, shipping_cost, total_price, status, stripe_session_url")
           .eq("id", id)
           .single();
 
@@ -245,7 +245,7 @@
         }
 
         document.getElementById("client-name").textContent = data.client_name || "Client";
-        document.getElementById("pc-name").textContent = "Configuration PC sur mesure";
+        document.getElementById("pc-name").textContent = data.template_name || "Configuration PC sur mesure";
         document.getElementById("shipping-cost").textContent = Number(data.shipping_cost || 0) > 0 ? formatEUR(data.shipping_cost) : "Offerte";
         document.getElementById("total-price").textContent = formatEUR(data.total_price);
         renderComponents(normalizeComponents(data.selected_options));
