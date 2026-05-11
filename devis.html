@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votre Devis | La Belle Config</title>
+  <meta name="description" content="Validez et réglez votre configuration PC sur mesure en toute sécurité.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          colors: {
+            cyan: {
+              DEFAULT: '#53B6D3',
+              50: '#F0F9FB',
+              100: '#E1F3F8',
+              200: '#C2E7F0',
+              300: '#A4DBE9',
+              400: '#85CFE1',
+              500: '#53B6D3',
+              600: '#3D9DB9',
+              700: '#2F788E',
+              800: '#205362',
+              900: '#112D36',
+              950: '#0B1D23',
+            }
+          }
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-900 font-sans text-zinc-100 antialiased selection:bg-cyan-500/30">
+  <main class="relative min-h-screen overflow-hidden flex flex-col items-center justify-center p-5">
+    <!-- Grid Background -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,41,55,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,41,55,0.4)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+    <!-- Top glowing line -->
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent"></div>
+
+    <div class="relative z-10 w-full max-w-2xl">
+      <!-- Header -->
+      <header class="flex flex-col items-center justify-center mb-8">
+        <a href="/" class="group flex flex-col items-center">
+          <img class="h-16 w-16 rounded-xl object-contain shadow-lg shadow-black/50 transition-transform group-hover:scale-105" src="assets/frame-4.svg" alt="La Belle Config">
+          <h1 class="mt-4 text-xl font-bold tracking-tight text-white">La Belle Config</h1>
+        </a>
+      </header>
+
+      <!-- Main Card -->
+      <div class="w-full rounded-2xl border border-gray-800 bg-black/60 p-6 sm:p-10 backdrop-blur-xl shadow-2xl shadow-black/50">
+        
+        <!-- STATE: LOADING -->
+        <div id="state-loading" class="flex min-h-[300px] flex-col items-center justify-center text-center">
+          <div class="mb-6 h-12 w-12 animate-spin rounded-full border-2 border-gray-800 border-t-cyan-500"></div>
+          <p class="text-lg font-semibold text-white animate-pulse">Récupération de votre devis...</p>
+        </div>
+
+        <!-- STATE: ERROR -->
+        <div id="state-error" class="hidden min-h-[300px] flex-col items-center justify-center text-center">
+          <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-red-500/25 bg-red-500/10 text-3xl text-red-400">!</div>
+          <h2 class="text-2xl font-bold text-white">Devis introuvable</h2>
+          <p class="mt-4 max-w-md text-sm leading-6 text-gray-400">
+            Ce devis est introuvable ou a expiré. Veuillez contacter l'équipe La Belle Config.
+          </p>
+          <a class="mt-8 rounded-lg border border-gray-700 bg-gray-800/50 px-5 py-2.5 text-sm font-semibold text-gray-200 transition hover:border-cyan-500/50 hover:bg-gray-800 hover:text-cyan-100" href="mailto:support@labelleconfig.fr">
+            Contacter le support
+          </a>
+        </div>
+
+        <!-- STATE: PAID -->
+        <div id="state-paid" class="hidden min-h-[300px] flex-col items-center justify-center text-center">
+          <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/25 bg-emerald-500/10 text-2xl text-emerald-400">✓</div>
+          <h2 class="text-2xl font-bold text-white">Excellente nouvelle !</h2>
+          <p class="mt-4 max-w-md text-sm leading-6 text-gray-300">
+            Ce devis a déjà été réglé. Votre PC est en cours de préparation dans notre atelier.
+          </p>
+          <a class="mt-8 rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-500 shadow-lg shadow-cyan-500/20" href="/">
+            Retour à l'accueil
+          </a>
+        </div>
+
+        <!-- STATE: QUOTE -->
+        <div id="state-quote" class="hidden flex-col">
+          <div class="border-b border-gray-800 pb-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+              Bonjour <span id="client-name" class="text-cyan-400"></span>,
+            </h2>
+            <p class="mt-2 text-gray-400 font-medium">Votre configuration sur-mesure est prête.</p>
+          </div>
+
+          <div class="mt-6 rounded-lg border border-cyan-500/20 bg-cyan-500/5 p-4 flex gap-3 items-start">
+            <span class="text-cyan-400 text-lg leading-none mt-0.5">💡</span>
+            <p class="text-sm leading-relaxed text-cyan-100/80">
+              Le devis détaillé complet au format PDF se trouve en pièce jointe de l'email que vous venez de recevoir.
+            </p>
+          </div>
+
+          <div class="mt-8">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <span id="pc-name" class="text-gray-200">Configuration</span>
+            </h3>
+            
+            <ul id="components-list" class="mt-4 space-y-3 text-sm text-gray-400">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+          <div class="mt-8 rounded-xl border border-gray-800 bg-gray-900/50 p-5">
+            <div class="flex justify-between items-center text-sm text-gray-400 pb-3 border-b border-gray-800/60">
+              <span>Frais de port</span>
+              <span id="shipping-cost" class="font-medium text-gray-200"></span>
+            </div>
+            <div class="flex justify-between items-center pt-3 text-lg font-bold">
+              <span class="text-white">Total TTC</span>
+              <span id="total-price" class="text-cyan-400"></span>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <button id="checkout-button" class="group relative w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-cyan-500/25 transition-all hover:scale-[1.02] hover:shadow-cyan-500/40 active:scale-[0.98]">
+              Valider et Payer de manière sécurisée
+              <span class="text-xl">🔒</span>
+              <div class="absolute inset-0 rounded-xl bg-white/20 opacity-0 transition-opacity group-hover:opacity-100"></div>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // Mêmes credentials que sur le reste du site public
+    const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const states = {
+      loading: document.getElementById("state-loading"),
+      error: document.getElementById("state-error"),
+      paid: document.getElementById("state-paid"),
+      quote: document.getElementById("state-quote"),
+    };
+
+    function showState(stateName) {
+      Object.values(states).forEach(el => {
+        el.classList.add("hidden");
+        el.classList.remove("flex");
+      });
+      states[stateName].classList.remove("hidden");
+      states[stateName].classList.add("flex");
+    }
+
+    async function init() {
+      const id = new URLSearchParams(window.location.search).get("id");
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      if (!id || !uuidPattern.test(id)) {
+        showState("error");
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("public_quotes_view")
+          .select("client_name, selected_options, shipping_cost, total_price, status, stripe_session_url")
+          .eq("id", id)
+          .single();
+
+        if (error || !data) {
+          console.error("Erreur de récupération du devis:", error);
+          showState("error");
+          return;
+        }
+
+        // Check if paid
+        const statusLower = data.status ? data.status.toLowerCase() : "";
+        if (statusLower === "payé" || statusLower === "paid" || statusLower === "paye" || statusLower === "validée") {
+          showState("paid");
+          return;
+        }
+
+        // Render Quote details
+        document.getElementById("client-name").textContent = data.client_name || "Client";
+        document.getElementById("pc-name").textContent = "Configuration PC Sur-Mesure";
+        
+        const shipping = data.shipping_cost ? parseFloat(data.shipping_cost) : 0;
+        document.getElementById("shipping-cost").textContent = shipping === 0 ? "Offerts" : `${shipping.toFixed(2)} €`;
+        
+        const total = data.total_price ? parseFloat(data.total_price) : 0;
+        document.getElementById("total-price").textContent = `${total.toFixed(2)} €`;
+
+        // Parse components
+        const compList = document.getElementById("components-list");
+        compList.innerHTML = "";
+        let components = data.selected_options;
+        
+        try {
+          if (typeof components === 'string') {
+            components = JSON.parse(components);
+          }
+        } catch(e) {}
+
+        let compArray = [];
+        if (Array.isArray(components)) {
+          compArray = components;
+        } else if (components && typeof components === 'object') {
+          // Flatten selected options object for display
+          Object.values(components).forEach(v => {
+            if (v && v.name) {
+              compArray.push(v.name);
+            } else if (typeof v === 'string') {
+               compArray.push(v);
+            }
+          });
+        } else if (components) {
+          compArray = [components];
+        }
+
+        if (compArray.length > 0) {
+          compArray.forEach(c => {
+            if (typeof c === 'string' || typeof c === 'number') {
+              const li = document.createElement("li");
+              li.className = "flex items-start gap-2";
+              li.innerHTML = `<span class="text-cyan-500/50 mt-0.5">•</span> <span>${c}</span>`;
+              compList.appendChild(li);
+            } else if (typeof c === 'object' && c.name) {
+              const li = document.createElement("li");
+              li.className = "flex items-start gap-2";
+              li.innerHTML = `<span class="text-cyan-500/50 mt-0.5">•</span> <span>${c.name}</span>`;
+              compList.appendChild(li);
+            }
+          });
+        } else {
+          compList.innerHTML = `<li class="italic text-gray-500">Détails de la configuration dans le PDF de votre email.</li>`;
+        }
+
+        // Setup CTA
+        const btn = document.getElementById("checkout-button");
+        btn.onclick = () => {
+          if (data.stripe_session_url) {
+            window.location.href = data.stripe_session_url;
+          } else {
+            alert("Lien de paiement indisponible pour le moment.");
+          }
+        };
+
+        showState("quote");
+
+      } catch (err) {
+        console.error(err);
+        showState("error");
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
