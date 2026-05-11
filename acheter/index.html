@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votre devis | La Belle Config</title>
-  <meta name="description" content="Consultez votre devis La Belle Config et sécurisez votre commande via Stripe.">
+  <title>Acheter votre PC | La Belle Config</title>
+  <meta name="description" content="Achetez votre PC Gaming assemblé par La Belle Config avec paiement sécurisé Stripe.">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -72,7 +72,7 @@
           <img class="h-11 w-11 rounded-xl object-contain shadow-2xl shadow-black/40" src="../assets/frame-4.svg" alt="La Belle Config">
           <div>
             <p class="text-sm font-black tracking-tight text-white">La Belle Config</p>
-            <p class="text-xs font-medium text-slate-400">Devis sécurisé</p>
+            <p class="text-xs font-medium text-slate-400">Achat direct sécurisé</p>
           </div>
         </a>
         <a class="hidden rounded-full border border-white/10 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-brand/40 hover:text-white sm:inline-flex" href="mailto:support@labelleconfig.fr">
@@ -85,46 +85,50 @@
           <div class="loading-orb mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-brand/25 bg-brand/10 shadow-2xl shadow-brand/10">
             <div class="h-7 w-7 animate-spin rounded-full border-2 border-slate-700 border-t-brand"></div>
           </div>
-          <p class="text-lg font-black text-white">Récupération du devis</p>
-          <p class="mt-2 max-w-sm text-sm leading-6 text-slate-400">On vérifie le récapitulatif et le lien de paiement sécurisé.</p>
+          <p class="text-lg font-black text-white">Chargement du PC</p>
+          <p class="mt-2 max-w-sm text-sm leading-6 text-slate-400">On vérifie la disponibilité de cette machine en atelier.</p>
         </div>
 
         <div id="state-error" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
           <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-400/25 bg-red-400/10 text-2xl font-black text-red-200">!</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Devis introuvable</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Ce lien est incomplet, expiré ou ne correspond à aucun devis actif. Notre équipe peut vous renvoyer un lien valide.</p>
-          <a class="mt-8 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-brand" href="mailto:support@labelleconfig.fr">Contacter le support</a>
+          <h1 class="text-3xl font-black tracking-tight text-white">PC Indisponible</h1>
+          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Ce lien est invalide ou ce PC a déjà été vendu. Consultez nos autres configurations disponibles sur le catalogue.</p>
+          <a class="mt-8 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-brand" href="/">Voir le catalogue</a>
         </div>
 
         <div id="state-paid" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
           <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300/10 text-2xl font-black text-emerald-200">✓</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Commande sécurisée</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Ce devis a déjà été réglé. Votre configuration est passée en préparation atelier.</p>
-          <a id="tracking-link" class="mt-8 rounded-2xl bg-brand px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300" href="/suivi">Suivre ma commande</a>
+          <h1 class="text-3xl font-black tracking-tight text-white">Commande confirmée !</h1>
+          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Votre paiement a bien été reçu. Ce PC est maintenant réservé pour vous et passera en expédition très prochainement.</p>
+          <a class="mt-8 rounded-2xl bg-brand px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300" href="/">Retour à l'accueil</a>
         </div>
 
-        <div id="state-missing-payment" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
+        <div id="state-cancelled" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
           <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-300/10 text-2xl font-black text-amber-100">⌁</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Paiement en préparation</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Le devis existe, mais le lien Stripe n’est pas encore disponible. Répondez à l’email reçu ou contactez le support pour le régénérer.</p>
-          <a class="mt-8 rounded-2xl border border-white/10 px-5 py-3 text-sm font-black text-white transition hover:border-brand/40 hover:bg-brand/10" href="mailto:support@labelleconfig.fr">Demander un nouveau lien</a>
+          <h1 class="text-3xl font-black tracking-tight text-white">Paiement annulé</h1>
+          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Vous avez annulé le processus de paiement. Ce PC reste disponible à la vente.</p>
+          <button onclick="window.location.href = window.location.pathname + '?id=' + new URLSearchParams(window.location.search).get('id')" class="mt-8 rounded-2xl border border-white/10 px-5 py-3 text-sm font-black text-white transition hover:border-brand/40 hover:bg-brand/10">Réessayer</button>
         </div>
 
-        <div id="state-quote" class="hidden flex-col gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+        <div id="state-purchase" class="hidden flex-col gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
           <div>
-            <p class="text-xs font-black uppercase tracking-[0.28em] text-brand">Devis validé</p>
-            <h1 class="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">Bonjour <span id="client-name" class="text-brand"></span></h1>
-            <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-400">Votre configuration a été étudiée par La Belle Config. Le paiement est sécurisé par Stripe, et la commande passe en atelier dès validation.</p>
+            <p class="text-xs font-black uppercase tracking-[0.28em] text-brand">PC Prêt à l'envoi</p>
+            <h1 id="pc-name" class="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">PC Gamer</h1>
+            <p id="pc-description" class="mt-4 max-w-2xl text-sm leading-7 text-slate-400 whitespace-pre-wrap"></p>
 
-            <div class="soft-card mt-7 rounded-3xl p-5">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Configuration</p>
-                  <h2 id="pc-name" class="mt-2 text-2xl font-black text-white">Configuration PC</h2>
+            <div class="soft-card mt-7 overflow-hidden rounded-3xl">
+              <div class="p-5">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Stock Atelier</p>
+                    <h2 class="mt-2 text-xl font-black text-white">Disponibilité Immédiate</h2>
+                  </div>
+                  <span class="rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-black text-brand">Prêt</span>
                 </div>
-                <span class="rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-black text-brand">Prêt</span>
               </div>
-              <ul id="components-list" class="mt-5 grid gap-2 text-sm text-slate-300 sm:grid-cols-2"></ul>
+              <div id="pc-image-container" class="hidden h-64 w-full bg-black/40">
+                <img id="pc-image" src="" alt="Aperçu du PC" class="h-full w-full object-contain p-4" />
+              </div>
             </div>
           </div>
 
@@ -132,8 +136,8 @@
             <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Récapitulatif</p>
             <div class="mt-5 space-y-3 border-b border-white/10 pb-5 text-sm">
               <div class="flex items-center justify-between gap-4 text-slate-400">
-                <span>Préparation & livraison</span>
-                <span id="shipping-cost" class="font-bold text-slate-200"></span>
+                <span>Expédition</span>
+                <span class="font-bold text-slate-200">Express</span>
               </div>
               <div class="flex items-end justify-between gap-4">
                 <span class="font-bold text-white">Total TTC</span>
@@ -141,9 +145,10 @@
               </div>
             </div>
             <button id="checkout-button" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-brand px-5 py-4 text-sm font-black text-slate-950 shadow-2xl shadow-brand/20 transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50">
-              Valider et payer sécurisé
+              <span id="checkout-text">Procéder au paiement</span>
+              <div id="checkout-spinner" class="ml-2 hidden h-4 w-4 animate-spin rounded-full border-2 border-slate-950 border-t-transparent"></div>
             </button>
-            <p id="payment-note" class="mt-4 text-center text-xs leading-5 text-slate-500">Redirection vers Stripe Checkout. Aucune donnée bancaire ne transite par nos serveurs.</p>
+            <p id="payment-note" class="mt-4 text-center text-xs leading-5 text-slate-500">Paiement sécurisé via Stripe. L'ordinateur vous sera expédié sous 24 à 48h ouvrées.</p>
           </aside>
         </div>
       </div>
@@ -156,13 +161,14 @@
     const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const ERP_API_URL = "https://erp-lbc.vercel.app/api/stock-checkout";
 
     const states = {
       loading: document.getElementById("state-loading"),
       error: document.getElementById("state-error"),
       paid: document.getElementById("state-paid"),
-      missingPayment: document.getElementById("state-missing-payment"),
-      quote: document.getElementById("state-quote"),
+      cancelled: document.getElementById("state-cancelled"),
+      purchase: document.getElementById("state-purchase"),
     };
 
     const formatEUR = (value) => new Intl.NumberFormat("fr-FR", {
@@ -178,46 +184,14 @@
         el.classList.remove("flex", "grid");
       });
       states[stateName].classList.remove("hidden");
-      states[stateName].classList.add(stateName === "quote" ? "grid" : "flex");
-    }
-
-    function normalizeComponents(raw) {
-      let value = raw;
-      if (typeof value === "string") {
-        try { value = JSON.parse(value); } catch { value = []; }
-      }
-      if (!Array.isArray(value) && value && typeof value === "object") {
-        if (Array.isArray(value.pricing_lines)) value = value.pricing_lines;
-        else value = Object.values(value);
-      }
-      if (!Array.isArray(value)) return [];
-      return value
-        .map((item) => {
-          if (typeof item === "string") return item;
-          if (item && typeof item === "object") return item.name || item.label || item.category || null;
-          return null;
-        })
-        .filter(Boolean);
-    }
-
-    function renderComponents(components) {
-      const list = document.getElementById("components-list");
-      list.innerHTML = "";
-      const rows = components.length ? components : ["Détails complets dans le PDF reçu par email"];
-      rows.forEach((name) => {
-        const li = document.createElement("li");
-        li.className = "flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[.035] px-3 py-2";
-        const dot = document.createElement("span");
-        dot.className = "h-1.5 w-1.5 rounded-full bg-brand";
-        const text = document.createElement("span");
-        text.textContent = name;
-        li.append(dot, text);
-        list.appendChild(li);
-      });
+      states[stateName].classList.add(stateName === "purchase" ? "grid" : "flex");
     }
 
     async function init() {
-      const id = new URLSearchParams(window.location.search).get("id");
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      const paymentStatus = urlParams.get("payment");
+      
       const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
       if (!id || !uuidPattern.test(id)) {
@@ -225,49 +199,79 @@
         return;
       }
 
+      if (paymentStatus === "success") {
+        showState("paid");
+        return;
+      }
+      
+      if (paymentStatus === "cancelled") {
+        showState("cancelled");
+        return;
+      }
+
       try {
         const { data, error } = await supabase
-          .from("public_quotes_view")
-          .select("client_name, template_name, selected_options, shipping_cost, total_price, status, stripe_session_url")
+          .from("public_stock_builds_view")
+          .select("id, name, description, public_price, image_paths")
           .eq("id", id)
           .single();
 
         if (error || !data) {
-          console.error("Erreur de récupération du devis:", error);
+          console.error("Erreur de récupération du PC:", error);
           showState("error");
           return;
         }
 
-        const statusLower = String(data.status || "").toLowerCase();
-        if (["payé", "paid", "paye", "validée"].includes(statusLower)) {
-          const trackingLink = document.getElementById("tracking-link");
-          if (trackingLink && id) {
-            trackingLink.href = `/suivi?id=${id}`;
-          }
-          showState("paid");
-          return;
-        }
+        document.getElementById("pc-name").textContent = data.name || "PC Gamer";
+        document.getElementById("pc-description").textContent = data.description || "Ordinateur prêt à jouer.";
+        document.getElementById("total-price").textContent = formatEUR(data.public_price);
 
-        document.getElementById("client-name").textContent = data.client_name || "Client";
-        document.getElementById("pc-name").textContent = data.template_name || "Configuration PC sur mesure";
-        document.getElementById("shipping-cost").textContent = Number(data.shipping_cost || 0) > 0 ? formatEUR(data.shipping_cost) : "Offerte";
-        document.getElementById("total-price").textContent = formatEUR(data.total_price);
-        renderComponents(normalizeComponents(data.selected_options));
+        if (data.image_paths && data.image_paths.length > 0) {
+          const imageContainer = document.getElementById("pc-image-container");
+          const imgEl = document.getElementById("pc-image");
+          imgEl.src = `${SUPABASE_URL}/storage/v1/object/public/build-images/${data.image_paths[0]}`;
+          imageContainer.classList.remove("hidden");
+        }
 
         const checkoutButton = document.getElementById("checkout-button");
-        if (!data.stripe_session_url) {
-          checkoutButton.disabled = true;
-          checkoutButton.textContent = "Lien de paiement indisponible";
-          document.getElementById("payment-note").textContent = "Notre équipe doit régénérer le lien Stripe pour ce devis.";
-          showState("missingPayment");
-          return;
-        }
+        const checkoutText = document.getElementById("checkout-text");
+        const checkoutSpinner = document.getElementById("checkout-spinner");
 
-        checkoutButton.addEventListener("click", () => {
-          window.location.href = data.stripe_session_url;
+        checkoutButton.addEventListener("click", async () => {
+          checkoutButton.disabled = true;
+          checkoutText.textContent = "Création du lien...";
+          checkoutSpinner.classList.remove("hidden");
+
+          try {
+            const res = await fetch(ERP_API_URL, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ build_id: id })
+            });
+            
+            const result = await res.json();
+            
+            if (!res.ok) {
+              throw new Error(result.error || "Erreur de création de paiement");
+            }
+            
+            if (result.checkout_url) {
+              window.location.href = result.checkout_url;
+            } else {
+              throw new Error("Lien de paiement non reçu");
+            }
+          } catch (e) {
+            console.error(e);
+            alert("Une erreur est survenue lors de la création du paiement: " + e.message);
+            checkoutButton.disabled = false;
+            checkoutText.textContent = "Procéder au paiement";
+            checkoutSpinner.classList.add("hidden");
+          }
         });
 
-        showState("quote");
+        showState("purchase");
       } catch (err) {
         console.error(err);
         showState("error");
