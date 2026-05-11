@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Catalogue Loader (Supabase Integration)
     const SUPABASE_URL = 'https://pnnuqntyhvrbzikaktuu.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBubnVxbnR5aHZyYnppa2FrdHV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0MDU5MDksImV4cCI6MjA5Mjk4MTkwOX0.7k4RbANKhf95bw9y63qyVXWoiX8Op8Tx0uC37oVeanQ';
-    
+
     // Initialize Supabase client
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let pcData = [];
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function mapSupabaseToPC(build) {
         const c = build.components || [];
-        
+
         // Aplatir le tableau de composants
         let compObj = {};
         if (Array.isArray(c)) {
@@ -125,9 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Construire les URLs d'images complètes (utilisation d'un bucket supposé "builds" ou "images")
-        // Note: Si les images ne s'affichent pas, il faudra ajuster le nom du bucket
-        const bucketName = 'build-images'; // <-- Le vrai nom de votre bucket
+        // Construire les URLs d'images complètes
+        const bucketName = 'build-images';
         let imageUrls = [];
         if (Array.isArray(build.image_paths) && build.image_paths.length > 0) {
             imageUrls = build.image_paths.map(path => {
@@ -136,12 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return {
+            id: build.id,
+            statusRaw: build.status,
             Nom: build.name || 'PC Inconnu',
             Prix: build.public_price ? `${build.public_price} €` : 'N/A',
+            PrixRaw: build.public_price,
             Statut: build.status === 'en_ligne' ? 'Disponible' : build.status === 'vendu' ? 'Vendu' : build.status,
             ImageURL: imageUrls.join(';') || '',
             VintedURL: build.vinted_url || '',
-            
+
             // Composants mappés selon la "category"
             CPU: compObj.cpu || '-',
             GPU: compObj.gpu || '-',
@@ -157,18 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadCatalogue() {
         const grid = document.getElementById('pc-grid');
         try {
-            // Fetch depuis Supabase : table builds, jointure avec components, et filtre sur status
             const { data, error } = await supabase
                 .from('builds')
                 .select('*, components(*)')
                 .in('status', ['en_ligne', 'vendu']);
 
             if (error) throw error;
-            
-            // Map the data
+
             pcData = (data || []).map(mapSupabaseToPC);
-            
-            // Render the UI
+
             renderCatalogue(pcData);
         } catch (error) {
             console.error('Erreur Supabase:', error);
@@ -315,6 +314,39 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbsHtml = `<div class="modal-thumbs-container">${allThumbImages}</div>`;
         }
 
+        // Achat / Acheter directement (chantier 5)
+        const isAvailable = pc.statusRaw === 'en_ligne';
+        const hasVinted = !!pc.VintedURL;
+        const buyDirectUrl = pc.id ? `/acheter?id=${encodeURIComponent(pc.id)}` : '';
+
+        let buyBlockHtml = '';
+        if (isAvailable && buyDirectUrl) {
+            buyBlockHtml = `
+                <a href="${buyDirectUrl}" class="btn btn-cyan btn-block btn-lg tech-btn">
+                    Acheter directement <i data-lucide="credit-card"></i>
+                </a>
+                ${hasVinted ? `
+                    <a href="${escapeHTML(pc.VintedURL)}" target="_blank" rel="noreferrer"
+                       class="btn btn-outline btn-block" style="margin-top:.5rem;">
+                        Ou voir sur Vinted <i data-lucide="external-link"></i>
+                    </a>
+                ` : ''}
+            `;
+        } else if (hasVinted) {
+            buyBlockHtml = `
+                <a href="${escapeHTML(pc.VintedURL)}" target="_blank" rel="noreferrer"
+                   class="btn btn-cyan btn-block btn-lg tech-btn">
+                    Voir sur Vinted <i data-lucide="external-link"></i>
+                </a>
+            `;
+        } else {
+            buyBlockHtml = `
+                <button class="btn btn-outline btn-block btn-lg tech-btn" disabled>
+                    Non disponible
+                </button>
+            `;
+        }
+
         modalBody.innerHTML = `
             <div class="modal-gallery-wrapper">
                 <div class="modal-images ${layoutClass}">
@@ -325,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="modal-details">
                 <h2 class="modal-title">${pc.Nom || 'La Belle Config'}</h2>
                 <div class="modal-price">${pc.Prix || 'N/A'}</div>
-                
+
                 <div class="specs-grid">
                     <div class="spec-item"><i data-lucide="cpu"></i><div class="spec-content"><h4>Processeur</h4><p>${pc.CPU || '-'}</p></div></div>
                     <div class="spec-item"><i data-lucide="monitor"></i><div class="spec-content"><h4>Carte Graphique</h4><p>${pc.GPU || '-'}</p></div></div>
@@ -337,9 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="spec-item"><i data-lucide="monitor-play"></i><div class="spec-content"><h4>Système d'exploitation</h4><p>${pc["OS installé"] || '-'}</p></div></div>
                 </div>
 
-                <a href="${pc.VintedURL || '#'}" target="_blank" class="btn btn-cyan btn-block btn-lg tech-btn" ${!pc.VintedURL ? 'disabled' : ''}>
-                    Acheter en ligne <i data-lucide="external-link"></i>
-                </a>
+                ${buyBlockHtml}
             </div>
         `;
 
@@ -402,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // En mode no-cors on estime que sans erreur réseau, la requête part.
-            // On masque le formulaire et on affiche le succès de façon claire
             Array.from(form.children).forEach(child => {
                 if (!child.classList.contains('form-footer')) {
                     child.style.display = 'none';
@@ -434,9 +463,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (startY <= 0) return;
 
             const html = document.documentElement;
-            html.style.scrollBehavior = 'auto'; // Disable native CSS smooth scroll temporarily
+            html.style.scrollBehavior = 'auto';
 
-            const duration = 1200; // 1.2s specific bell curve easing
+            const duration = 1200;
             const startTime = performance.now();
 
             function easeInOutQuart(t) {
@@ -453,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
-                    html.style.scrollBehavior = ''; // Restore
+                    html.style.scrollBehavior = '';
                 }
             }
             requestAnimationFrame(step);
