@@ -249,9 +249,10 @@
         const btn = document.getElementById("checkout-button");
         btn.onclick = () => {
           if (data.stripe_session_url) {
-            window.location.href = data.stripe_session_url;
+            window.location.href = data.stripe_session_url; // Redirection native et robuste
           } else {
-            alert("Lien de paiement indisponible pour le moment.");
+            console.error("Lien Stripe Session URL manquant dans Supabase pour ce devis.");
+            alert("Impossible de vous rediriger vers le paiement Stripe. Veuillez contacter La Belle Config via l'email reçu.");
           }
         };
 
