@@ -12,11 +12,19 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
           },
           colors: {
-            brand: "#53B6D3",
-            ink: "#070A12",
+            brand: { DEFAULT: "#0891B2", light: "#CFFAFE", dark: "#0E7490" },
+          },
+          keyframes: {
+            "rise-in": {
+              from: { opacity: "0", transform: "translateY(16px)" },
+              to:   { opacity: "1", transform: "translateY(0)" },
+            },
+          },
+          animation: {
+            "rise-in": "rise-in .55s cubic-bezier(.22,1,.36,1) both",
           },
         },
       },
@@ -24,162 +32,307 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @keyframes rise-in {
-      from { opacity: 0; transform: translateY(18px) scale(.985); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes soft-pulse {
-      0%, 100% { opacity: .55; transform: scale(1); }
-      50% { opacity: .95; transform: scale(1.04); }
-    }
-    .page-shell {
-      background:
-        radial-gradient(circle at 18% 12%, rgba(83, 182, 211, .22), transparent 28rem),
-        radial-gradient(circle at 84% 20%, rgba(99, 102, 241, .16), transparent 30rem),
-        linear-gradient(135deg, #05070d 0%, #090d16 48%, #02040a 100%);
-    }
-    .subtle-grid {
+    body { background-color: #F6F7F9; }
+    .page-grid {
       background-image:
-        linear-gradient(to right, rgba(148, 163, 184, .08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, .08) 1px, transparent 1px);
-      background-size: 46px 46px;
-      mask-image: linear-gradient(to bottom, black, transparent 82%);
+        linear-gradient(to right,  rgba(8,145,178,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(8,145,178,.05) 1px, transparent 1px);
+      background-size: 44px 44px;
     }
-    .glass-card {
-      animation: rise-in .65s cubic-bezier(.22, 1, .36, 1) both;
-      background: linear-gradient(145deg, rgba(15, 23, 42, .86), rgba(2, 6, 23, .78));
-      border: 1px solid rgba(148, 163, 184, .18);
-      box-shadow: 0 30px 100px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .06);
-      backdrop-filter: blur(22px);
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin .75s linear infinite; }
+    /* Shimmer for loading skeleton */
+    @keyframes shimmer { from { background-position: -600px 0; } to { background-position: 600px 0; } }
+    .shimmer {
+      background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.6s infinite linear;
     }
-    .soft-card {
-      background: rgba(255, 255, 255, .045);
-      border: 1px solid rgba(148, 163, 184, .14);
-    }
-    .loading-orb { animation: soft-pulse 1.8s ease-in-out infinite; }
   </style>
 </head>
-<body class="min-h-screen bg-ink font-sans text-slate-100 antialiased selection:bg-brand/30">
-  <main class="page-shell relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-8 sm:py-12">
-    <div class="subtle-grid absolute inset-0 opacity-70"></div>
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/70 to-transparent"></div>
 
-    <section class="relative z-10 w-full max-w-4xl">
-      <header class="mb-7 flex items-center justify-between gap-4">
-        <a href="/" class="flex items-center gap-3">
-          <img class="h-11 w-11 rounded-xl object-contain shadow-2xl shadow-black/40" src="../assets/frame-4.svg" alt="La Belle Config">
-          <div>
-            <p class="text-sm font-black tracking-tight text-white">La Belle Config</p>
-            <p class="text-xs font-medium text-slate-400">Devis sécurisé</p>
+<body class="min-h-screen font-sans text-gray-900 antialiased">
+
+  <!-- ── STICKY HEADER ─────────────────────────────────────────────── -->
+  <header class="sticky top-0 z-50 border-b border-gray-200/80 bg-white/90 backdrop-blur-sm">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5">
+      <a href="/" class="flex items-center gap-3 transition-opacity hover:opacity-80">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white p-1.5 shadow-sm">
+          <img src="../assets/frame-4.svg" alt="La Belle Config" class="h-full w-full object-contain">
+        </div>
+        <div class="leading-tight">
+          <p class="text-sm font-bold text-gray-900">La Belle Config</p>
+          <p class="text-[11px] text-gray-400">Devis sécurisé</p>
+        </div>
+      </a>
+      <a href="mailto:support@labelleconfig.fr"
+         class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-medium text-gray-500 shadow-sm transition hover:border-gray-300 hover:text-gray-700">
+        <svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Support
+      </a>
+    </div>
+  </header>
+
+  <!-- ── MAIN ─────────────────────────────────────────────────────── -->
+  <main class="page-grid min-h-[calc(100vh-57px)] px-5 pb-16 pt-10">
+    <div class="mx-auto max-w-5xl">
+
+      <!-- STATE: LOADING -->
+      <div id="state-loading" class="flex min-h-[58vh] flex-col items-center justify-center text-center">
+        <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div class="spinner h-6 w-6 rounded-full border-2 border-gray-200 border-t-brand"></div>
+        </div>
+        <p class="text-base font-semibold text-gray-800">Chargement de votre devis…</p>
+        <p class="mt-1.5 text-sm text-gray-400">Vérification du récapitulatif et du lien de paiement.</p>
+      </div>
+
+      <!-- STATE: ERROR -->
+      <div id="state-error" class="hidden min-h-[58vh] flex-col items-center justify-center text-center">
+        <div class="animate-rise mx-auto max-w-sm">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-500">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
           </div>
-        </a>
-        <a class="hidden rounded-full border border-white/10 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-brand/40 hover:text-white sm:inline-flex" href="mailto:support@labelleconfig.fr">
-          Support
-        </a>
-      </header>
-
-      <div class="glass-card rounded-[2rem] p-5 sm:p-7 lg:p-8">
-        <div id="state-loading" class="flex min-h-[420px] flex-col items-center justify-center text-center">
-          <div class="loading-orb mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-brand/25 bg-brand/10 shadow-2xl shadow-brand/10">
-            <div class="h-7 w-7 animate-spin rounded-full border-2 border-slate-700 border-t-brand"></div>
-          </div>
-          <p class="text-lg font-black text-white">Récupération du devis</p>
-          <p class="mt-2 max-w-sm text-sm leading-6 text-slate-400">On vérifie le récapitulatif et le lien de paiement sécurisé.</p>
-        </div>
-
-        <div id="state-error" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
-          <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-400/25 bg-red-400/10 text-2xl font-black text-red-200">!</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Devis introuvable</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Ce lien est incomplet, expiré ou ne correspond à aucun devis actif. Notre équipe peut vous renvoyer un lien valide.</p>
-          <a class="mt-8 rounded-2xl bg-white px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-brand" href="mailto:support@labelleconfig.fr">Contacter le support</a>
-        </div>
-
-        <div id="state-paid" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
-          <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300/10 text-2xl font-black text-emerald-200">✓</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Commande sécurisée</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Ce devis a déjà été réglé. Votre configuration est passée en préparation atelier.</p>
-          <a id="tracking-link" class="mt-8 rounded-2xl bg-brand px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300" href="/suivi">Suivre ma commande</a>
-        </div>
-
-        <div id="state-missing-payment" class="hidden min-h-[420px] flex-col items-center justify-center text-center">
-          <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-300/10 text-2xl font-black text-amber-100">⌁</div>
-          <h1 class="text-3xl font-black tracking-tight text-white">Paiement en préparation</h1>
-          <p class="mt-4 max-w-md text-sm leading-6 text-slate-400">Le devis existe, mais le lien Stripe n’est pas encore disponible. Répondez à l’email reçu ou contactez le support pour le régénérer.</p>
-          <a class="mt-8 rounded-2xl border border-white/10 px-5 py-3 text-sm font-black text-white transition hover:border-brand/40 hover:bg-brand/10" href="mailto:support@labelleconfig.fr">Demander un nouveau lien</a>
-        </div>
-
-        <div id="state-quote" class="hidden flex-col gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
-          <div>
-            <p class="text-xs font-black uppercase tracking-[0.28em] text-brand">Devis validé</p>
-            <h1 class="mt-4 text-3xl font-black tracking-tight text-white sm:text-5xl">Bonjour <span id="client-name" class="text-brand"></span></h1>
-            <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-400">Votre configuration a été étudiée par La Belle Config. Le paiement est sécurisé par Stripe, et la commande passe en atelier dès validation.</p>
-
-            <div class="soft-card mt-7 rounded-3xl p-5">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Configuration</p>
-                  <h2 id="pc-name" class="mt-2 text-2xl font-black text-white">Configuration PC</h2>
-                </div>
-                <span class="rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-black text-brand">Prêt</span>
-              </div>
-              <ul id="components-list" class="mt-5 grid gap-2 text-sm text-slate-300 sm:grid-cols-2"></ul>
-            </div>
-          </div>
-
-          <aside class="soft-card rounded-3xl p-5 lg:sticky lg:top-8">
-            <p class="text-xs font-black uppercase tracking-[0.22em] text-slate-500">Récapitulatif</p>
-            <div class="mt-5 space-y-3 border-b border-white/10 pb-5 text-sm">
-              <div class="flex items-center justify-between gap-4 text-slate-400">
-                <span>Préparation & livraison</span>
-                <span id="shipping-cost" class="font-bold text-slate-200"></span>
-              </div>
-              <div class="flex items-end justify-between gap-4">
-                <span class="font-bold text-white">Total TTC</span>
-                <span id="total-price" class="text-3xl font-black text-brand"></span>
-              </div>
-            </div>
-            <button id="checkout-button" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-brand px-5 py-4 text-sm font-black text-slate-950 shadow-2xl shadow-brand/20 transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50">
-              Valider et payer sécurisé
-            </button>
-            <p id="payment-note" class="mt-4 text-center text-xs leading-5 text-slate-500">Redirection vers Stripe Checkout. Aucune donnée bancaire ne transite par nos serveurs.</p>
-          </aside>
+          <h1 class="text-2xl font-bold text-gray-900">Devis introuvable</h1>
+          <p class="mt-3 text-sm leading-6 text-gray-500">Ce lien est incomplet, expiré ou ne correspond à aucun devis actif. Notre équipe peut vous renvoyer un lien valide.</p>
+          <a href="mailto:support@labelleconfig.fr"
+             class="mt-7 inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700">
+            Contacter le support
+          </a>
         </div>
       </div>
-    </section>
+
+      <!-- STATE: PAID -->
+      <div id="state-paid" class="hidden min-h-[58vh] flex-col items-center justify-center text-center">
+        <div class="animate-rise mx-auto max-w-sm">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-600">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900">Commande confirmée</h1>
+          <p class="mt-3 text-sm leading-6 text-gray-500">Ce devis a déjà été réglé. Votre configuration est passée en préparation atelier — merci pour votre confiance.</p>
+          <a id="tracking-link" href="/suivi"
+             class="mt-7 inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Suivre ma commande
+          </a>
+        </div>
+      </div>
+
+      <!-- STATE: MISSING PAYMENT -->
+      <div id="state-missing-payment" class="hidden min-h-[58vh] flex-col items-center justify-center text-center">
+        <div class="animate-rise mx-auto max-w-sm">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-100 bg-amber-50 text-amber-500">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900">Paiement en préparation</h1>
+          <p class="mt-3 text-sm leading-6 text-gray-500">Le devis existe, mais le lien Stripe n'est pas encore disponible. Répondez à l'email reçu ou contactez notre équipe pour le régénérer.</p>
+          <a href="mailto:support@labelleconfig.fr"
+             class="mt-7 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
+            Demander un nouveau lien
+          </a>
+        </div>
+      </div>
+
+      <!-- STATE: QUOTE ─────────────────────────────────────────────── -->
+      <div id="state-quote" class="hidden">
+        <div class="animate-rise">
+
+          <!-- Hero headline -->
+          <div class="mb-8">
+            <p class="text-[11px] font-semibold uppercase tracking-[.16em] text-brand">Devis validé</p>
+            <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              Votre devis est prêt
+            </h1>
+            <p class="mt-2 text-[15px] text-gray-500">
+              Bonjour <strong id="client-name" class="font-semibold text-gray-700"></strong>, votre configuration a été validée par La Belle Config.
+            </p>
+          </div>
+
+          <!-- Two-column grid -->
+          <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_352px] lg:items-start">
+
+            <!-- ── LEFT: Configuration ──────────────────────────── -->
+            <div class="rounded-2xl border border-gray-200 bg-white shadow-sm">
+              <!-- Card header -->
+              <div class="flex items-start justify-between gap-4 border-b border-gray-100 p-6">
+                <div>
+                  <p class="text-[10px] font-semibold uppercase tracking-[.18em] text-gray-400">Configuration validée</p>
+                  <h2 id="pc-name" class="mt-1.5 text-xl font-bold text-gray-900">Configuration PC sur mesure</h2>
+                  <p class="mt-0.5 text-xs text-gray-400">PC assemblé sur mesure · La Belle Config</p>
+                </div>
+                <span class="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  Validée
+                </span>
+              </div>
+
+              <!-- Components list -->
+              <div class="p-6">
+                <p class="mb-3.5 text-[10px] font-semibold uppercase tracking-[.18em] text-gray-400">Composants inclus</p>
+                <ul id="components-list" class="grid gap-2 sm:grid-cols-2"></ul>
+              </div>
+
+              <!-- Guarantee footer -->
+              <div class="flex items-start gap-3 border-t border-gray-100 bg-gray-50/60 px-6 py-4 rounded-b-2xl">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <p class="text-xs leading-5 text-gray-500">
+                  Configuration assemblée avec des composants neufs et/ou reconditionnés.
+                  <strong class="font-medium text-gray-700">Garantie légale de conformité 12 mois.</strong>
+                  SAV disponible via notre support dédié.
+                </p>
+              </div>
+            </div>
+
+            <!-- ── RIGHT: Payment Summary ────────────────────────── -->
+            <div class="lg:sticky lg:top-[73px]">
+              <div class="rounded-2xl border border-gray-200 bg-white shadow-sm">
+
+                <!-- Recap header -->
+                <div class="border-b border-gray-100 px-6 pt-5 pb-4">
+                  <p class="text-[10px] font-semibold uppercase tracking-[.18em] text-gray-400">Récapitulatif</p>
+                </div>
+
+                <!-- Line items -->
+                <div class="px-6 pt-4 pb-4 space-y-2.5">
+                  <div class="flex items-center justify-between gap-3 text-sm">
+                    <span class="text-gray-500">Configuration PC</span>
+                    <span id="config-price" class="font-medium text-gray-700">—</span>
+                  </div>
+                  <div class="flex items-center justify-between gap-3 text-sm">
+                    <span class="text-gray-500">Préparation & livraison</span>
+                    <span id="shipping-cost" class="font-medium text-gray-700"></span>
+                  </div>
+                </div>
+
+                <!-- Total -->
+                <div class="mx-6 border-t border-gray-100 pt-4 pb-5">
+                  <div class="flex items-end justify-between gap-2">
+                    <span class="text-sm font-semibold text-gray-600">Total TTC</span>
+                    <span id="total-price" class="text-[2rem] font-extrabold leading-none tracking-tight text-gray-900"></span>
+                  </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="px-6 pb-5">
+                  <button id="checkout-button"
+                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-brand px-5 py-4 text-sm font-bold text-white shadow-sm transition hover:bg-brand-dark active:scale-[.99] disabled:cursor-not-allowed disabled:opacity-50">
+                    <svg class="h-4 w-4 transition group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    Valider et payer sécurisé
+                  </button>
+                  <p id="payment-note" class="mt-3 text-center text-[11px] leading-5 text-gray-400">
+                    Redirection vers Stripe Checkout. Aucune donnée bancaire ne transite par nos serveurs.
+                  </p>
+                </div>
+
+                <!-- Trust badges -->
+                <div class="border-t border-gray-100 px-6 pt-4 pb-4 space-y-2.5">
+                  <div class="flex items-center gap-2.5">
+                    <svg class="h-4 w-4 shrink-0 text-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <span class="text-xs text-gray-500">Paiement sécurisé par <strong class="font-semibold text-gray-700">Stripe</strong></span>
+                  </div>
+                  <div class="flex items-center gap-2.5">
+                    <svg class="h-4 w-4 shrink-0 text-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="text-xs text-gray-500">Garantie légale de conformité <strong class="font-semibold text-gray-700">12 mois</strong></span>
+                  </div>
+                  <div class="flex items-center gap-2.5">
+                    <svg class="h-4 w-4 shrink-0 text-brand" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span class="text-xs text-gray-500">Support technique inclus après achat</span>
+                  </div>
+                </div>
+
+                <!-- Footer links -->
+                <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 border-t border-gray-100 px-6 py-3.5">
+                  <a href="/cgv" class="text-[11px] text-gray-400 transition hover:text-gray-600">CGV</a>
+                  <a href="/cgv#garantie" class="text-[11px] text-gray-400 transition hover:text-gray-600">Politique de garantie</a>
+                  <a href="mailto:support@labelleconfig.fr" class="text-[11px] text-gray-400 transition hover:text-gray-600">Contact support</a>
+                </div>
+
+              </div>
+
+              <!-- Subtle Stripe logo note -->
+              <p class="mt-3 text-center text-[11px] text-gray-400">
+                Propulsé par
+                <strong class="font-semibold text-gray-500">Stripe</strong>
+                — infrastructure de paiement certifiée PCI-DSS.
+              </p>
+            </div>
+            <!-- /RIGHT -->
+
+          </div>
+          <!-- /Two-column grid -->
+
+        </div>
+      </div>
+      <!-- /QUOTE STATE -->
+
+    </div>
   </main>
 
+  <!-- ── SCRIPT ────────────────────────────────────────────────────── -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    const SUPABASE_URL = "https://pnnuqntyhvrbzikaktuu.supabase.co";
+    const SUPABASE_URL     = "https://pnnuqntyhvrbzikaktuu.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_jnUCLTE3e1Va2rUcSyC1gw_MLRYw1ht";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const states = {
-      loading: document.getElementById("state-loading"),
-      error: document.getElementById("state-error"),
-      paid: document.getElementById("state-paid"),
+      loading:        document.getElementById("state-loading"),
+      error:          document.getElementById("state-error"),
+      paid:           document.getElementById("state-paid"),
       missingPayment: document.getElementById("state-missing-payment"),
-      quote: document.getElementById("state-quote"),
+      quote:          document.getElementById("state-quote"),
     };
 
-    const formatEUR = (value) => new Intl.NumberFormat("fr-FR", {
-      currency: "EUR",
-      maximumFractionDigits: 2,
-      minimumFractionDigits: 2,
-      style: "currency",
-    }).format(Number(value || 0));
+    const formatEUR = (value) =>
+      new Intl.NumberFormat("fr-FR", {
+        currency: "EUR",
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+        style: "currency",
+      }).format(Number(value || 0));
 
-    function showState(stateName) {
+    function showState(name) {
       Object.values(states).forEach((el) => {
         el.classList.add("hidden");
-        el.classList.remove("flex", "grid");
+        el.classList.remove("flex", "block");
       });
-      states[stateName].classList.remove("hidden");
-      states[stateName].classList.add(stateName === "quote" ? "grid" : "flex");
+      states[name].classList.remove("hidden");
+      states[name].classList.add(name === "quote" ? "block" : "flex");
     }
+
+    const CATEGORY_LABELS = {
+      cpu:         "Processeur",
+      gpu:         "Carte graphique",
+      ram:         "Mémoire RAM",
+      storage:     "Stockage",
+      motherboard: "Carte mère",
+      psu:         "Alimentation",
+      cooling:     "Refroidissement",
+      case:        "Boîtier",
+    };
 
     function normalizeComponents(raw) {
       let value = raw;
@@ -193,37 +346,47 @@
       if (!Array.isArray(value)) return [];
       return value
         .map((item) => {
-          if (typeof item === "string") return item;
-          if (item && typeof item === "object") return item.name || item.label || item.category || null;
+          if (typeof item === "string") return { name: item, category: null };
+          if (item && typeof item === "object") return {
+            name:     item.name  || item.label    || item.category || null,
+            category: item.category || null,
+          };
           return null;
         })
-        .filter(Boolean);
+        .filter((item) => item && item.name);
     }
 
     function renderComponents(components) {
       const list = document.getElementById("components-list");
       list.innerHTML = "";
-      const rows = components.length ? components : ["Détails complets dans le PDF reçu par email"];
-      rows.forEach((name) => {
+      const items = components.length
+        ? components
+        : [{ name: "Détails complets dans le PDF joint à votre email", category: null }];
+
+      items.forEach(({ name, category }) => {
+        const label = CATEGORY_LABELS[category] || null;
         const li = document.createElement("li");
-        li.className = "flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[.035] px-3 py-2";
-        const dot = document.createElement("span");
-        dot.className = "h-1.5 w-1.5 rounded-full bg-brand";
+        li.className =
+          "flex flex-col rounded-xl border border-gray-100 bg-gray-50 px-3.5 py-2.5 transition hover:border-gray-200";
+        if (label) {
+          const cat = document.createElement("span");
+          cat.className = "mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400";
+          cat.textContent = label;
+          li.appendChild(cat);
+        }
         const text = document.createElement("span");
+        text.className = "text-[13px] font-medium leading-snug text-gray-800";
         text.textContent = name;
-        li.append(dot, text);
+        li.appendChild(text);
         list.appendChild(li);
       });
     }
 
     async function init() {
       const id = new URLSearchParams(window.location.search).get("id");
-      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-      if (!id || !uuidPattern.test(id)) {
-        showState("error");
-        return;
-      }
+      if (!id || !uuidRe.test(id)) { showState("error"); return; }
 
       try {
         const { data, error } = await supabase
@@ -232,42 +395,43 @@
           .eq("id", id)
           .single();
 
-        if (error || !data) {
-          console.error("Erreur de récupération du devis:", error);
-          showState("error");
-          return;
-        }
+        if (error || !data) { showState("error"); return; }
 
         const statusLower = String(data.status || "").toLowerCase();
         if (["payé", "paid", "paye", "validée"].includes(statusLower)) {
-          const trackingLink = document.getElementById("tracking-link");
-          if (trackingLink && id) {
-            trackingLink.href = `/suivi?id=${id}`;
-          }
+          const link = document.getElementById("tracking-link");
+          if (link && id) link.href = `/suivi?id=${id}`;
           showState("paid");
           return;
         }
 
-        document.getElementById("client-name").textContent = data.client_name || "Client";
-        document.getElementById("pc-name").textContent = data.template_name || "Configuration PC sur mesure";
-        document.getElementById("shipping-cost").textContent = Number(data.shipping_cost || 0) > 0 ? formatEUR(data.shipping_cost) : "Offerte";
-        document.getElementById("total-price").textContent = formatEUR(data.total_price);
+        // Populate hero + recap
+        document.getElementById("client-name").textContent   = data.client_name   || "Client";
+        document.getElementById("pc-name").textContent       = data.template_name || "Configuration PC sur mesure";
+
+        const shipping = Number(data.shipping_cost || 0);
+        const total    = Number(data.total_price   || 0);
+        const config   = total - shipping;
+
+        document.getElementById("config-price").textContent  = config > 0 ? formatEUR(config) : "—";
+        document.getElementById("shipping-cost").textContent = shipping > 0 ? formatEUR(shipping) : "Offerte";
+        document.getElementById("total-price").textContent   = formatEUR(total);
+
         renderComponents(normalizeComponents(data.selected_options));
 
-        const checkoutButton = document.getElementById("checkout-button");
+        const btn = document.getElementById("checkout-button");
         if (!data.stripe_session_url) {
-          checkoutButton.disabled = true;
-          checkoutButton.textContent = "Lien de paiement indisponible";
-          document.getElementById("payment-note").textContent = "Notre équipe doit régénérer le lien Stripe pour ce devis.";
+          btn.disabled      = true;
+          btn.textContent   = "Lien de paiement indisponible";
+          document.getElementById("payment-note").textContent =
+            "Notre équipe doit régénérer le lien Stripe pour ce devis.";
           showState("missingPayment");
           return;
         }
 
-        checkoutButton.addEventListener("click", () => {
-          window.location.href = data.stripe_session_url;
-        });
-
+        btn.addEventListener("click", () => { window.location.href = data.stripe_session_url; });
         showState("quote");
+
       } catch (err) {
         console.error(err);
         showState("error");
