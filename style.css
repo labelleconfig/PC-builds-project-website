@@ -515,6 +515,13 @@ body[data-theme="dark"] .semi-card { background: rgba(10, 10, 14, 0.92); }
     color: var(--text-muted);
     font-size: 0.86rem;
 }
+.vinted-badge {
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: #059669;
+    opacity: 0.82;
+    letter-spacing: 0.01em;
+}
 body[data-theme="dark"] .testimonial-item {
     background: rgba(16,16,24,0.58);
     border-color: var(--border-glass);
