@@ -80,6 +80,35 @@
               <strong>Ton PC est prêt !</strong> Le suivi de livraison en temps réel est maintenant disponible sur Vinted/Leboncoin.
             </div>
 
+            <a id="boxtal-link" class="mt-5 hidden items-center justify-center gap-2 rounded-lg bg-cyan-300 px-5 py-3 text-sm font-bold text-black transition hover:bg-cyan-200" target="_blank" rel="noreferrer">
+              <span>Suivre le colis</span>
+              <span id="boxtal-tracking-number" class="font-mono text-xs opacity-80"></span>
+            </a>
+
+            <div id="downloads" class="mt-6 hidden">
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Tes documents</p>
+              <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                <a id="download-certificate" class="hidden flex items-center gap-3 rounded-lg border border-zinc-800 bg-black/40 p-3 text-sm transition hover:border-cyan-300/50 hover:bg-cyan-300/5" target="_blank" rel="noreferrer">
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-cyan-300/25 bg-cyan-300/10 text-cyan-300">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-semibold text-white">Certificat qualité</p>
+                    <p class="text-xs text-zinc-500">Tests OCCT + HWiNFO validés</p>
+                  </div>
+                </a>
+                <a id="download-invoice" class="hidden flex items-center gap-3 rounded-lg border border-zinc-800 bg-black/40 p-3 text-sm transition hover:border-cyan-300/50 hover:bg-cyan-300/5" target="_blank" rel="noreferrer">
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-cyan-300/25 bg-cyan-300/10 text-cyan-300">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-semibold text-white">Facture officielle</p>
+                    <p id="invoice-number" class="text-xs text-zinc-500">Document légal</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+
             <p class="mt-7 text-xs leading-5 text-zinc-500">
               Pour toute question, réponds simplement au dernier message de l'équipe La Belle Config.
             </p>
@@ -136,12 +165,39 @@
       },
     ];
 
+    const ERP_API_BASE = "https://erp-lbc.vercel.app";
+
     const loadingState = document.getElementById("loading-state");
     const errorState = document.getElementById("error-state");
     const trackingState = document.getElementById("tracking-state");
     const errorMessage = document.getElementById("error-message");
     const timeline = document.getElementById("timeline");
     const readyMessage = document.getElementById("ready-message");
+    const boxtalLink = document.getElementById("boxtal-link");
+    const boxtalTrackingNumber = document.getElementById("boxtal-tracking-number");
+    const downloads = document.getElementById("downloads");
+    const downloadCertificate = document.getElementById("download-certificate");
+    const downloadInvoice = document.getElementById("download-invoice");
+    const invoiceNumberEl = document.getElementById("invoice-number");
+
+    // Map the API stage (preparation / qc / shipping / delivered) to the
+    // 5-step internal rank used by the timeline. Keeps the existing branded
+    // UI without rewriting it.
+    function rankFromStage(stage, isShipped) {
+      switch (stage) {
+        case "delivered":
+          return statusRank["Expédiée"];
+        case "shipping":
+          return isShipped
+            ? statusRank["Expédiée"]
+            : statusRank["En test"] + 0.5;
+        case "qc":
+          return statusRank["En test"];
+        case "preparation":
+        default:
+          return statusRank["En montage"];
+      }
+    }
 
     function showError(message) {
       loadingState.classList.add("hidden");
@@ -197,15 +253,81 @@
       trackingState.classList.remove("hidden");
     }
 
-    async function init() {
-      const id = new URLSearchParams(window.location.search).get("id");
-      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    function renderTrackingFromApi(api) {
+      const buyerFirst = api.build?.buyer_first_name || api.build?.buyer_name?.split(" ")[0] || "Client";
+      const lbcId = api.build?.lbc_id ? ` (${api.build.lbc_id})` : "";
 
-      if (!id || !uuidPattern.test(id)) {
-        showError("Le lien ne contient pas d'identifiant de suivi valide.");
-        return;
+      // Adapt to the legacy timeline renderer by synthesising a status string
+      // and rank from the API stage. We then enrich with the new sections.
+      const isShipped = Boolean(api.shipping?.tracking_number);
+      let statusLabel;
+      if (api.isCancelled) {
+        statusLabel = "Annulée";
+      } else if (api.stage === "delivered") {
+        statusLabel = "Expédiée";
+      } else if (api.stage === "shipping") {
+        statusLabel = isShipped ? "Expédiée" : "Prête à expédier";
+      } else if (api.stage === "qc") {
+        statusLabel = "En test";
+      } else {
+        statusLabel = "En montage";
       }
 
+      // Build a synthetic payload compatible with renderTracking() so we
+      // don't duplicate the timeline rendering code.
+      renderTracking({
+        client_name: buyerFirst + lbcId,
+        status: statusLabel,
+      });
+
+      // ── Boxtal tracking link
+      if (api.shipping?.tracking_url && api.shipping?.tracking_number) {
+        boxtalLink.href = api.shipping.tracking_url;
+        boxtalTrackingNumber.textContent = `${api.shipping.carrier || "Chronopost"} · ${api.shipping.tracking_number}`;
+        boxtalLink.classList.remove("hidden");
+        boxtalLink.classList.add("flex");
+      }
+
+      // ── Downloads (QC certificate + invoice)
+      let hasAnyDownload = false;
+      if (api.qc?.certificate_url) {
+        downloadCertificate.href = api.qc.certificate_url;
+        downloadCertificate.classList.remove("hidden");
+        downloadCertificate.classList.add("flex");
+        hasAnyDownload = true;
+      }
+      if (api.invoice?.pdf_url) {
+        downloadInvoice.href = api.invoice.pdf_url;
+        if (api.invoice.number) {
+          invoiceNumberEl.textContent = `Facture n° ${api.invoice.number}`;
+        }
+        downloadInvoice.classList.remove("hidden");
+        downloadInvoice.classList.add("flex");
+        hasAnyDownload = true;
+      }
+      if (hasAnyDownload) {
+        downloads.classList.remove("hidden");
+      }
+    }
+
+    async function fetchFromErpApi(token) {
+      try {
+        const response = await fetch(`${ERP_API_BASE}/api/public/tracking/${encodeURIComponent(token)}`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          showError(payload.error || "Aucune commande ne correspond à ce lien.");
+          return;
+        }
+        renderTrackingFromApi(payload);
+      } catch (err) {
+        showError("Impossible de charger ce suivi pour le moment. Réessaie dans quelques minutes.");
+      }
+    }
+
+    async function fetchLegacyDemande(id) {
       const { data, error } = await supabase.rpc("get_tracking_info", {
         p_demande_id: id,
       });
@@ -216,13 +338,35 @@
       }
 
       const payload = Array.isArray(data) ? data[0] : data;
-
       if (!payload) {
         showError("Aucune commande ne correspond à ce lien de suivi.");
         return;
       }
 
       renderTracking(payload);
+    }
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+      const id = params.get("id");
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      // New flow: ?token=<tracking_token> — calls the ERP public API and shows
+      // the full post-payment experience (tracking + certificate + invoice).
+      if (token && token.length >= 8 && token.length <= 64) {
+        await fetchFromErpApi(token);
+        return;
+      }
+
+      // Legacy flow: ?id=<demande_uuid> — calls the Supabase RPC for demandes
+      // that don't yet have a build/tracking_token (pre-payment stage).
+      if (id && uuidPattern.test(id)) {
+        await fetchLegacyDemande(id);
+        return;
+      }
+
+      showError("Le lien ne contient pas d'identifiant de suivi valide.");
     }
 
     init();
