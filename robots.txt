@@ -1,0 +1,34 @@
+# robots.txt — labelleconfig.fr
+# Autorise toute l'indexation publique, bloque les pages transactionnelles
+# qui ne sont accessibles qu'avec un identifiant unique (devis/suivi/achat).
+
+User-agent: *
+Allow: /
+
+# Pages privées / transactionnelles : pas d'intérêt à les indexer
+Disallow: /devis/
+Disallow: /devis
+Disallow: /acheter/
+Disallow: /acheter
+Disallow: /suivi.html
+Disallow: /suivi
+
+# Pas de querystring indexable (Stripe session, tokens)
+Disallow: /*?id=
+Disallow: /*?token=
+Disallow: /*?session_id=
+
+# Bots IA agressifs : on les laisse passer mais avec un délai
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 5
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 5
+
+Sitemap: https://labelleconfig.fr/sitemap.xml
