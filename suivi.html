@@ -109,6 +109,56 @@
               </div>
             </div>
 
+            <!-- SAV ticket block, shown only for shipped/delivered builds -->
+            <div id="sav-block" class="mt-6 hidden">
+              <div id="sav-cta" class="rounded-lg border border-amber-300/30 bg-amber-300/5 p-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="text-sm font-bold text-amber-100">Un problème avec ta machine ?</p>
+                    <p class="mt-1 text-xs leading-5 text-zinc-400">
+                      Démarrage anormal, surchauffe, composant défectueux… On prend en charge sous 48h ouvrées.
+                    </p>
+                  </div>
+                  <button id="sav-open-btn" type="button" class="shrink-0 rounded-md border border-amber-300/50 bg-amber-300/10 px-3 py-2 text-xs font-bold text-amber-100 transition hover:border-amber-300 hover:bg-amber-300/20">
+                    Ouvrir un ticket SAV
+                  </button>
+                </div>
+              </div>
+
+              <form id="sav-form" class="mt-3 hidden rounded-lg border border-zinc-800 bg-black/50 p-4 space-y-3">
+                <div>
+                  <label for="sav-email" class="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                    Email de la commande
+                  </label>
+                  <input id="sav-email" type="email" required autocomplete="email" placeholder="alex@email.fr" class="mt-1 w-full rounded-md border border-zinc-800 bg-black px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none transition focus:border-cyan-300">
+                  <p class="mt-1 text-[11px] text-zinc-500">Confirme l'email avec lequel tu as commandé.</p>
+                </div>
+                <div>
+                  <label for="sav-description" class="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                    Décris le problème
+                  </label>
+                  <textarea id="sav-description" required rows="5" minlength="20" maxlength="4000" placeholder="Mon PC ne démarre plus depuis ce matin. Quand j'appuie sur le bouton power, les ventilateurs tournent 2 secondes puis s'arrêtent…" class="mt-1 w-full resize-none rounded-md border border-zinc-800 bg-black px-3 py-2 text-sm text-white placeholder-zinc-600 outline-none transition focus:border-cyan-300"></textarea>
+                  <p class="mt-1 text-[11px] text-zinc-500">Minimum 20 caractères. Sois précis, ça nous fait gagner du temps en diagnostic.</p>
+                </div>
+                <div id="sav-error" class="hidden rounded-md border border-red-300/30 bg-red-300/10 px-3 py-2 text-xs text-red-200"></div>
+                <div class="flex items-center gap-2">
+                  <button type="submit" id="sav-submit" class="rounded-md bg-cyan-300 px-4 py-2 text-sm font-bold text-black transition hover:bg-cyan-200 disabled:cursor-wait disabled:opacity-60">
+                    Envoyer le ticket
+                  </button>
+                  <button type="button" id="sav-cancel" class="rounded-md border border-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-300 transition hover:border-zinc-500">
+                    Annuler
+                  </button>
+                </div>
+              </form>
+
+              <div id="sav-success" class="mt-3 hidden rounded-lg border border-emerald-300/30 bg-emerald-300/10 p-4 text-sm text-emerald-100">
+                <p class="font-bold">✅ Ton ticket a bien été reçu.</p>
+                <p class="mt-1 text-xs leading-5 text-emerald-200/80">
+                  L'atelier La Belle Config va te recontacter par email sous 48h ouvrées. Si c'est urgent, réponds au dernier email de l'équipe.
+                </p>
+              </div>
+            </div>
+
             <p class="mt-7 text-xs leading-5 text-zinc-500">
               Pour toute question, réponds simplement au dernier message de l'équipe La Belle Config.
             </p>
@@ -179,6 +229,18 @@
     const downloadCertificate = document.getElementById("download-certificate");
     const downloadInvoice = document.getElementById("download-invoice");
     const invoiceNumberEl = document.getElementById("invoice-number");
+    const savBlock = document.getElementById("sav-block");
+    const savCta = document.getElementById("sav-cta");
+    const savOpenBtn = document.getElementById("sav-open-btn");
+    const savForm = document.getElementById("sav-form");
+    const savCancelBtn = document.getElementById("sav-cancel");
+    const savSubmitBtn = document.getElementById("sav-submit");
+    const savEmailInput = document.getElementById("sav-email");
+    const savDescriptionInput = document.getElementById("sav-description");
+    const savErrorEl = document.getElementById("sav-error");
+    const savSuccessEl = document.getElementById("sav-success");
+
+    let activeTrackingToken = null;
 
     // Map the API stage (preparation / qc / shipping / delivered) to the
     // 5-step internal rank used by the timeline. Keeps the existing branded
@@ -308,9 +370,91 @@
       if (hasAnyDownload) {
         downloads.classList.remove("hidden");
       }
+
+      // ── SAV block: only for shipped/delivered builds and only if not cancelled.
+      const eligibleForSav =
+        !api.isCancelled && (api.stage === "shipping" || api.stage === "delivered");
+      if (eligibleForSav) {
+        savBlock.classList.remove("hidden");
+      }
     }
 
+    // ── SAV form wiring
+    function showSavError(msg) {
+      savErrorEl.textContent = msg;
+      savErrorEl.classList.remove("hidden");
+    }
+
+    function clearSavError() {
+      savErrorEl.textContent = "";
+      savErrorEl.classList.add("hidden");
+    }
+
+    savOpenBtn?.addEventListener("click", () => {
+      savCta.classList.add("hidden");
+      savForm.classList.remove("hidden");
+      clearSavError();
+      setTimeout(() => savEmailInput.focus(), 50);
+    });
+
+    savCancelBtn?.addEventListener("click", () => {
+      savForm.classList.add("hidden");
+      savCta.classList.remove("hidden");
+      clearSavError();
+    });
+
+    savForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearSavError();
+
+      if (!activeTrackingToken) {
+        showSavError("Token de suivi manquant. Recharge la page.");
+        return;
+      }
+
+      const email = savEmailInput.value.trim().toLowerCase();
+      const description = savDescriptionInput.value.trim();
+
+      if (!email) {
+        showSavError("L'email est requis.");
+        return;
+      }
+      if (description.length < 20) {
+        showSavError("Décris ton problème en au moins 20 caractères.");
+        return;
+      }
+
+      savSubmitBtn.disabled = true;
+      savSubmitBtn.textContent = "Envoi en cours...";
+
+      try {
+        const response = await fetch(`${ERP_API_BASE}/api/public/sav/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tracking_token: activeTrackingToken,
+            customer_email: email,
+            issue_description: description,
+          }),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          showSavError(payload.error || "Envoi impossible. Réessaie dans quelques instants.");
+          return;
+        }
+        savForm.classList.add("hidden");
+        savCta.classList.add("hidden");
+        savSuccessEl.classList.remove("hidden");
+      } catch (err) {
+        showSavError("Impossible de joindre l'atelier. Réessaie dans quelques minutes ou écris à contact@labelleconfig.fr.");
+      } finally {
+        savSubmitBtn.disabled = false;
+        savSubmitBtn.textContent = "Envoyer le ticket";
+      }
+    });
+
     async function fetchFromErpApi(token) {
+      activeTrackingToken = token;
       try {
         const response = await fetch(`${ERP_API_BASE}/api/public/tracking/${encodeURIComponent(token)}`, {
           method: "GET",
