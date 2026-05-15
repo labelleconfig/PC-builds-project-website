@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelector('.nav-links');
     const themeToggle = document.getElementById('theme-toggle');
 
-    const savedTheme = localStorage.getItem('lbc-theme') || 'light';
+    const savedTheme = localStorage.getItem('lbc-theme') || 'dark';
     document.body.dataset.theme = savedTheme;
     themeToggle?.addEventListener('click', () => {
         const nextTheme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';

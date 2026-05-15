@@ -369,7 +369,7 @@
     body[data-theme="dark"] .text-red-700 { color: #fca5a5 !important; }
   </style>
 </head>
-<body data-theme="light" class="min-h-screen font-sans antialiased selection:bg-cyan-300 selection:text-slate-900">
+<body data-theme="dark" class="min-h-screen font-sans antialiased selection:bg-cyan-300 selection:text-slate-900">
   <main class="relative min-h-screen overflow-x-hidden">
     <div class="premium-bg fixed inset-0 -z-10"></div>
     <div class="premium-grid fixed inset-0 -z-10"></div>
@@ -616,7 +616,7 @@
     const CONFIGURATOR_SHARED_SECRET = "lbc_cfg_4kP9mNxYwV2qZ7tHbR8sLfA3jXcEgD5u";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const savedTheme = localStorage.getItem("lbc-theme") || "light";
+    const savedTheme = localStorage.getItem("lbc-theme") || "dark";
     document.body.dataset.theme = savedTheme;
     document.getElementById("config-theme-toggle").addEventListener("click", () => {
       const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
